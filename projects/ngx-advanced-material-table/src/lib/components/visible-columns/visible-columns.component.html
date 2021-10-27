@@ -1,0 +1,39 @@
+<button mat-icon-button class="close-icon" [mat-dialog-close]>
+    <mat-icon>close</mat-icon>
+</button>
+<h4 class="visible-columns-heading-texts" i18n="@@visible-columns-label-filterColumnsHeading">SELECT VISIBLE COLUMNS</h4>
+
+<div class="select-all-checkbox">
+    <mat-checkbox
+        id="visible-columns-selectall-checkbox"
+        [disableRipple]="true"
+        [checked]="getSelectAllCheckedValue()"
+        [indeterminate]="getSelectAllIndeterminate()"
+        (change)="onChangeSelectAll($event)"
+    >
+        <span i18n="@@visible-columns-label-selectAllColumns">SELECT ALL</span>
+    </mat-checkbox>
+</div>
+
+<mat-dialog-content id="visible-columns-checkboxes">
+    <div class="visible-column-item" *ngFor="let currentColumn of localColumnConfig; let i = index">
+        <mat-checkbox [disableRipple]="true" [checked]="currentColumn.Display" (change)="onChange($event, i)">
+            <span>{{ currentColumn.Title }} </span>
+        </mat-checkbox>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="visible-columns-bottom-buttons">
+    <button id="visible-columns-close-button" mat-button [mat-dialog-close]>
+        <span i18n="@@action-btn-cancel">Cancel</span>
+    </button>
+    <button
+        id="visible-columns-select-button"
+        mat-raised-button
+        color="accent"
+        [disabled]="!hasVisibleColumns()"
+        (click)="onApplyColumnVisibility()"
+    >
+        <span i18n="@@action-btn-Select">Select</span>
+    </button>
+</mat-dialog-actions>

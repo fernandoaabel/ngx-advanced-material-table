@@ -1,0 +1,43 @@
+@import '../../variables.scss';
+
+:host {
+    font-size: 0.75em;
+
+    .visible-columns-heading-texts {
+        color: $heading-color;
+        font-weight: bold;
+    }
+
+    .select-all-checkbox {
+        font-weight: bold;
+        background-color: $grid-odd-row-color;
+        padding: 0.5em;
+        margin-bottom: 1em;
+    }
+
+    .close-icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        fill: none;
+        color: map-get($mat-osm-blue, 500);
+        font-weight: bold;
+    }
+
+    .visible-column-item {
+        height: 25px;
+        padding: 0em 0.5em;
+    }
+
+    .visible-columns-bottom-buttons {
+        padding-top: 1em;
+        button {
+            flex: 1 1 auto;
+            font-weight: bold;
+        }
+    }
+
+    #visible-columns-select-button {
+        color: $font-color-secondary;
+    }
+}

@@ -1,0 +1,42 @@
+<mat-dialog-content>
+    <button mat-icon-button class="close-icon" [mat-dialog-close]="cancelResponse">
+        <mat-icon>close</mat-icon>
+    </button>
+    <div class="filter-heading-texts" i18n="@@filter-columns-label-filterRowsHeading">FILTER ROWS BY CONTENT</div>
+    <form id="formFilterRoutesPlanning" role="form" [formGroup]="filterForm">
+        <mat-form-field>
+            <mat-label i18n="@@formControl-label-filterGrid">Search filters</mat-label>
+            <input matInput type="text" formControlName="SearchFilters" id="FilterString" />
+        </mat-form-field>
+    </form>
+    <cdk-virtual-scroll-viewport itemSize="15" class="filter-column-viewport">
+        <span *ngIf="distinctColumnValues.length === 0" i18n="@@routeplanning-filter-column-no-values">No available values</span>
+
+        <div
+            class="filter-column-item"
+            *cdkVirtualFor="let value of distinctColumnValues | filterCriteria: searchFiltersValue; let i = index"
+        >
+            <mat-checkbox [value]="value.name" [checked]="value.checked" (change)="onSelectFilter($event)">
+                <span> {{ value.displayedName }}</span>
+            </mat-checkbox>
+        </div>
+    </cdk-virtual-scroll-viewport>
+    <div class="filter-heading-texts" i18n="@@filter-columns-label-sortColumn">SORT COLUMN</div>
+    <mat-button-toggle-group name="sortDirection" #group="matButtonToggleGroup" value="{{ selectedColumn.SortDirection }}">
+        <mat-button-toggle id="filter-columns-sort-ascending" value="asc" (change)="onSortingValueChange($event.value)">
+            <span i18n="@@filterColumns-btn-ascsort">Ascending <mat-icon class="filter-icons">arrow_upward</mat-icon></span>
+        </mat-button-toggle>
+        <mat-button-toggle id="filter-columns-sort-descending" value="desc" (change)="onSortingValueChange($event.value)">
+            <span i18n="@@filterColumns-btn-descsort">Descending <mat-icon class="filter-icons">arrow_downward</mat-icon></span>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+</mat-dialog-content>
+
+<mat-dialog-actions class="filter-columns-bottom-buttons">
+    <button id="filter-columns-close" mat-button [mat-dialog-close]="cancelResponse">
+        <span i18n="@@action-btn-cancel">Cancel</span>
+    </button>
+    <button mat-raised-button id="filter-columns-filter" (click)="onApplyFiltersButton()" color="accent">
+        <span i18n="@@action-btn-Filter">Filter</span>
+    </button>
+</mat-dialog-actions>

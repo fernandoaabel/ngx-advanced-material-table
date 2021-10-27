@@ -3,5 +3,49 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "ngx-advanced-material-table": {
+      "projectType": "library",
+      "root": "projects/ngx-advanced-material-table",
+      "sourceRoot": "projects/ngx-advanced-material-table/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/ngx-advanced-material-table/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-advanced-material-table/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-advanced-material-table/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-advanced-material-table/src/test.ts",
+            "tsConfig": "projects/ngx-advanced-material-table/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-advanced-material-table/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-advanced-material-table/tsconfig.lib.json",
+              "projects/ngx-advanced-material-table/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ngx-advanced-material-table"
 }

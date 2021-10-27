@@ -1,0 +1,239 @@
+<div>
+    <div class="table-top-panel" *ngIf="tableConfiguration.AllowFilter || tableConfiguration.AllowActions">
+        <div class="table-filter">
+            <ng-container *ngIf="tableConfiguration.AllowFilter">
+                <button
+                    mat-icon-button
+                    id="{{ tableConfiguration.Id }}-table-export-to-excel-button"
+                    title="Export To Excel"
+                    i18n-title="@@tooltip-text-exportExcel"
+                    (click)="exportToExcel()"
+                    [disabled]="noRowsDisplayed"
+                >
+                    <mat-icon>drive_folder_upload</mat-icon>
+                </button>
+
+                <mat-form-field>
+                    <input
+                        matInput
+                        id="{{ tableConfiguration.Id }}-table-filter-field"
+                        (keyup)="applyFilter($event.target)"
+                        i18n-placeholder="@@placeholder-text-filterResult"
+                        placeholder="Filter on results..."
+                    />
+                </mat-form-field>
+            </ng-container>
+        </div>
+
+        <div class="table-actions" *ngIf="tableConfiguration.AllowActions">
+            <button
+                mat-icon-button
+                id="{{ tableConfiguration.Id }}-table-clearAllFilters"
+                onclick="this.blur()"
+                (click)="clearAllFilters()"
+                [matTooltip]="templateClearAllFilters.innerText"
+            >
+                <img src="./assets/images/icons/clear-filters.svg" />
+            </button>
+
+            <button
+                mat-icon-button
+                id="{{ tableConfiguration.Id }}-table-showColumns"
+                onclick="this.blur()"
+                (click)="openVisibleColumnsDialog()"
+                [matTooltip]="templateShowHide.innerText"
+            >
+                <mat-icon>tune</mat-icon>
+            </button>
+
+            <button
+                mat-icon-button
+                id="{{ tableConfiguration.Id }}-table-print-button"
+                (click)="sendToPrinter()"
+                [disabled]="noRowsDisplayed"
+                [matTooltip]="templatePrint.innerText"
+            >
+                <mat-icon>print</mat-icon>
+            </button>
+
+            <template #templateShowHide i18n="@@table-tooltip-grid-showColumns">Show/hide columns</template>
+            <template #templateClearAllFilters i18n="@@table-tooltip-clear-all-filters">Clear all filters/sorting</template>
+            <template #templatePrint i18n="@@action-btn-print">Print</template>
+        </div>
+    </div>
+
+    <div class="table-pagination" *ngIf="tableConfiguration.AllowPagination">
+        <mat-paginator
+            [pageSizeOptions]="[10, 25, 50, 100]"
+            id="{{ tableConfiguration.Id }}-table-paginator"
+            showFirstLastButtons
+        ></mat-paginator>
+    </div>
+
+    <mat-table
+        id="{{ tableConfiguration.Id }}-table"
+        [dataSource]="dataSource"
+        matSort
+        cdkDropListGroup
+        cdkDropList
+        cdkDropListLockAxis="x"
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="headerDropListDropped($event)"
+    >
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox
+                    *ngIf="tableConfiguration.MultipleSelect"
+                    (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                >
+                </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="$event ? onRowChecked(row) : null"
+                    [checked]="selection.isSelected(row)"
+                >
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container *ngFor="let column of tableColumns; let i = index" matColumnDef="{{ column.Field }}">
+            <mat-header-cell
+                *matHeaderCellDef
+                cdkDrag
+                (cdkDragStarted)="headerDragStarted(i)"
+                [cdkDragData]="{ name: column.Field, columIndex: i }"
+                [cdkDragDisabled]="!isHeaderDraggable(column)"
+                [ngClass]="getColumnClassName(column)"
+                [matTooltip]="column.Title"
+            >
+                <ng-container *ngIf="isFilteringEnabledOnColumn(column)">
+                    <span mat-sort-header [class.selected]="hasFiltersOrSortingEnabled(column)">{{ column.Title }}</span>
+                    <button
+                        mat-icon-button
+                        disableRipple
+                        onclick="this.blur()"
+                        (click)="openFilterDialog(column)"
+                        [disabled]="noRowsDisplayed"
+                        [class.selected]="hasFiltersOrSortingEnabled(column)"
+                    >
+                        <mat-icon>filter_list</mat-icon>
+                    </button>
+                </ng-container>
+            </mat-header-cell>
+            <mat-cell
+                *matCellDef="let element; let rowIndex = index"
+                [ngClass]="getColumnClassName(column)"
+                (click)="isColumnClickable(column) ? onRowChecked(element) : null"
+            >
+                <div matTooltipClass="osm-table-tooltip" [matTooltip]="getToolTip(element, column)">
+                    <ng-container [ngSwitch]="column.ColumnType">
+                        <!-- DateTime -->
+                        <span *ngSwitchCase="columnType.DateTime"> {{ getElementText(column, element) }}</span>
+                        <!-- Date -->
+                        <span *ngSwitchCase="columnType.Date"> {{ getElementText(column, element) }}</span>
+                        <!-- Time -->
+                        <span *ngSwitchCase="columnType.Time"> {{ getElementText(column, element) }}</span>
+                        <!-- String -->
+                        <span
+                            *ngSwitchCase="columnType.String"
+                            [class.clickable]="column.HyperLink"
+                            (click)="onHyperLinkClicked(element, column)"
+                        >
+                            {{ getElementText(column, element) }}</span
+                        >
+                        <!-- Actions -->
+                        <!-- <ng-container *ngSwitchCase="columnType.Actions">
+                            <app-advance-osm-table-row-menu
+                                [rowData]="element"
+                                [tableRowMenu]="osmRowActionsConfig"
+                                (actionSelected)="onActionSelected($event)"
+                            ></app-advance-osm-table-row-menu>
+                        </ng-container> -->
+                        <!-- Dropdown -->
+                        <!-- <ng-container *ngSwitchCase="columnType.DropDown">
+                            <app-advanced-osm-table-row-dropdown
+                                [rowData]="element"
+                                [columnData]="column"
+                                [tableRowDropDown]="osmRowDropDownConfig"
+                                (dropDownSelected)="onDropDownSelected($event)"
+                            ></app-advanced-osm-table-row-dropdown>
+                        </ng-container> -->
+                        <!-- Icon -->
+                        <ng-container *ngSwitchCase="columnType.Icon">
+                            <button
+                                [id]="column.Title + '-' + element[column.IdField!]"
+                                mat-icon-button
+                                (click)="iconClick(element, column)"
+                            >
+                                <mat-icon> {{ column.MatIconName }}</mat-icon>
+                                {{ element[column.Field] }}
+                            </button>
+                        </ng-container>
+                        <!-- Number Input -->
+                        <ng-container *ngSwitchCase="columnType.NumberInput">
+                            <mat-form-field floatLabel="never">
+                                <input
+                                    matInput
+                                    onlyNumbers
+                                    type="number"
+                                    [min]="getMinValueForNumberInput(element, column)"
+                                    [max]="getMaxValueForNumberInput(element, column)"
+                                    (change)="numberInputChange(element, column, $event)"
+                                    [value]="element[column.Field]"
+                                />
+                                <!-- Suffix -->
+                                <span matSuffix class="suffix" *ngIf="column.Suffix">
+                                    {{ element[column.Suffix.Field] }}
+                                </span>
+                            </mat-form-field>
+                        </ng-container>
+                        <!-- Dropdown Dynamic -->
+                        <!-- <ng-container *ngSwitchCase="columnType.DropDownDynamic">
+                            <app-advanced-osm-table-row-dynamic-dropdown
+                                [rowData]="element"
+                                [columnData]="column"
+                                (dropDownSelected)="onDropDownSelected($event)"
+                            ></app-advanced-osm-table-row-dynamic-dropdown>
+                        </ng-container> -->
+                        <!-- Catalogue Selector -->
+                        <!-- <ng-container *ngSwitchCase="columnType.CatalogueSelect">
+                            <app-advanced-osm-table-row-catalogue-select
+                                [rowData]="element"
+                                [columnData]="column"
+                                [index]="rowIndex"
+                                (catalogueClicked)="onCatalogueClicked($event, column)"
+                                (searchClicked)="onCatalogueSearchClicked($event, column)"
+                                (clearClicked)="onCatalogueClearClicked($event, column)"
+                            ></app-advanced-osm-table-row-catalogue-select>
+                        </ng-container> -->
+                        <!-- Image -->
+                        <ng-container *ngSwitchCase="columnType.Image">
+                            <img src="{{ element[column.Field] }}" />
+                        </ng-container>
+                    </ng-container>
+                    <!-- Suffix -->
+                    <span class="suffix" *ngIf="column.Suffix && column.ColumnType !== columnType.NumberInput">
+                        {{ element[column.Suffix.Field] }}
+                    </span>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            id="{{ row.Id }}"
+            [ngClass]="getRowClassName()"
+            (dblclick)="onDoubleClick(row)"
+        ></mat-row>
+    </mat-table>
+
+    <div *ngIf="noRowsDisplayed" class="no-records">
+        <span i18n="@@table-noResultFound">No matching records found</span>
+    </div>
+</div>

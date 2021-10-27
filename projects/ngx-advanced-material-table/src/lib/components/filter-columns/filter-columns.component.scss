@@ -1,0 +1,56 @@
+@import '../../variables.scss';
+
+.filter-column-viewport {
+    height: 13em;
+    border: 1px solid lightgray;
+}
+
+.filter-heading-texts {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    color: $heading-color;
+    font-weight: bold;
+}
+
+.filter-column-item {
+    height: 25px;
+    padding: 0.2em 0.5em 0 0.5em;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: map-get($mat-osm-blue, 500);
+    font-weight: bold;
+}
+
+.mat-button-toggle-group {
+    .mat-button-toggle-checked {
+        background-color: map-get($mat-osm-blue, 500);
+
+        span {
+            color: white;
+        }
+    }
+}
+
+.filter-columns-bottom-buttons {
+    button {
+        flex: 1 1 auto;
+        font-weight: bold;
+    }
+}
+
+.filter-icons {
+    position: relative;
+    top: 0.2em;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+#filter-columns-filter {
+    color: $font-color-secondary;
+}
