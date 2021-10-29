@@ -8,7 +8,7 @@ import { ColumnType, IFilterColumnsData } from '../../interfaces/column-definiti
 import { FilterColumnValuesPipe } from '../../pipes/filter.pipe';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
-describe('Filter OSM Columns Component', () => {
+describe('Filter Columns Component', () => {
     let component: FilterColumnsComponent;
     let fixture: ComponentFixture<FilterColumnsComponent>;
 
@@ -25,7 +25,7 @@ describe('Filter OSM Columns Component', () => {
                 { provide: MatDialogRef, useValue: mockDialogRef },
                 {
                     provide: MAT_DIALOG_DATA,
-                    useValue: MockOSMColumnsData,
+                    useValue: MockData,
                 },
                 {
                     provide: FilterColumnValuesPipe,
@@ -47,12 +47,12 @@ describe('Filter OSM Columns Component', () => {
 
     it('should create', () => {
         // ARRANGE
-        const expectedOrder = [MockOSMColumnsData.distinctData[0], MockOSMColumnsData.distinctData[1], MockOSMColumnsData.distinctData[2]];
+        const expectedOrder = [MockData.distinctData[0], MockData.distinctData[1], MockData.distinctData[2]];
 
         // ASSERT
         expect(component).toBeTruthy();
         expect(component.distinctColumnValues).toEqual(expectedOrder);
-        expect(component.selectedColumn).toEqual(MockOSMColumnsData.selectedColumn);
+        expect(component.selectedColumn).toEqual(MockData.selectedColumn);
     });
 
     it('onSearchFiltersValueChanged should set search value', () => {
@@ -126,7 +126,7 @@ describe('Filter OSM Columns Component', () => {
     });
 });
 
-const MockOSMColumnsData: IFilterColumnsData = {
+const MockData: IFilterColumnsData = {
     selectedColumn: {
         Field: 'string',
         Title: 'string',

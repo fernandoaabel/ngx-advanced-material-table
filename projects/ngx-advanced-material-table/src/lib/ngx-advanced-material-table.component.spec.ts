@@ -1,19 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { NgxAdvancedMaterialTableComponent } from './ngx-advanced-material-table.component';
+import { AdvancedMaterialTableComponent } from './ngx-advanced-material-table.component';
 
 describe('NgxAdvancedMaterialTableComponent', () => {
-    let component: NgxAdvancedMaterialTableComponent;
-    let fixture: ComponentFixture<NgxAdvancedMaterialTableComponent>;
+    let component: AdvancedMaterialTableComponent;
+    let fixture: ComponentFixture<AdvancedMaterialTableComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [NgxAdvancedMaterialTableComponent],
+            declarations: [AdvancedMaterialTableComponent],
         }).compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(NgxAdvancedMaterialTableComponent);
+        fixture = TestBed.createComponent(AdvancedMaterialTableComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

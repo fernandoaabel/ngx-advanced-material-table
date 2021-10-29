@@ -1,6 +1,7 @@
 /*
  * Public API Surface of ngx-advanced-material-table
  */
+import '@angular/localize/init';
 
 export * from './lib/components/filter-columns/filter-columns.component';
 export * from './lib/ngx-advanced-material-table.component';

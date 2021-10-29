@@ -176,20 +176,20 @@
                         </div>
                         <!-- Actions -->
                         <!-- <ng-container *ngSwitchCase="columnType.Actions">
-                            <app-advance-osm-table-row-menu
+                            <app-advance-table-row-menu
                                 [rowData]="element"
-                                [tableRowMenu]="osmRowActionsConfig"
+                                [tableRowMenu]="RowActionsConfig"
                                 (actionSelected)="onActionSelected($event)"
-                            ></app-advance-osm-table-row-menu>
+                            ></app-advance-table-row-menu>
                         </ng-container> -->
                         <!-- Dropdown -->
                         <!-- <ng-container *ngSwitchCase="columnType.DropDown">
-                            <app-advanced-osm-table-row-dropdown
+                            <app-advanced-table-row-dropdown
                                 [rowData]="element"
                                 [columnData]="column"
-                                [tableRowDropDown]="osmRowDropDownConfig"
+                                [tableRowDropDown]="RowDropDownConfig"
                                 (dropDownSelected)="onDropDownSelected($event)"
-                            ></app-advanced-osm-table-row-dropdown>
+                            ></app-advanced-table-row-dropdown>
                         </ng-container> -->
                         <!-- Icon -->
                         <ng-container *ngSwitchCase="columnType.Icon">
@@ -222,11 +222,11 @@
                         </ng-container>
                         <!-- Dropdown Dynamic -->
                         <!-- <ng-container *ngSwitchCase="columnType.DropDownDynamic">
-                            <app-advanced-osm-table-row-dynamic-dropdown
+                            <app-advanced-table-row-dynamic-dropdown
                                 [rowData]="element"
                                 [columnData]="column"
                                 (dropDownSelected)="onDropDownSelected($event)"
-                            ></app-advanced-osm-table-row-dynamic-dropdown>
+                            ></app-advanced-table-row-dynamic-dropdown>
                         </ng-container> -->
                     </ng-container>
                     <!-- Suffix -->

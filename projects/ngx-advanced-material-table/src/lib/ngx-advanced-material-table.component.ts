@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 // FIXME(Fernando Abel): XLSX module not being found
 // import * as xlsx from 'xlsx';
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output, ChangeDetectorRef, AfterViewInit } from '@angular/core';
@@ -333,7 +333,7 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
             });
         });
 
-        result = _.uniqBy(result, (x) => x.displayedName);
+        result = _.uniqBy(result, (x: IDistinctColumns) => x.displayedName);
 
         return result;
     }
@@ -508,7 +508,7 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         }
     }
 
-    // TODO: Create a service for that, currently being used in advanced-osm-table and osm-table
+    // TODO: Create a service for that, currently being used in advanced table
     exportToExcel(): void {
         // const tableTitle = TableTags.Table;
         // const selectedData = this.getSelectedDataWithDisplayedColumnsOnly();
@@ -544,7 +544,7 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
     private getSelectedDataWithDisplayedColumnsOnly(): Partial<T>[] {
         const selectedData = this.getDataToExportPrint();
 
-        return _.map(selectedData, (obj) => {
+        return _.map(selectedData, (obj: T) => {
             return _.pick(obj, this.displayedColumns);
         });
     }
