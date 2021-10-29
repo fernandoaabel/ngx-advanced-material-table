@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import * as _ from 'lodash';
 // FIXME(Fernando Abel): XLSX module not being found
 // import * as xlsx from 'xlsx';
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output, ChangeDetectorRef, AfterViewInit } from '@angular/core';
