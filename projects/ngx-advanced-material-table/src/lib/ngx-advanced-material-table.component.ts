@@ -1,32 +1,29 @@
 import * as _ from 'lodash';
-import * as xlsx from 'xlsx';
+// FIXME(Fernando Abel): XLSX module not being found
+// import * as xlsx from 'xlsx';
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { Sort, ArrowViewStateTransition, MatSortHeader, MatSort, MatSortable } from '@angular/material/sort';
+import { Sort, ArrowViewStateTransition, MatSortHeader, MatSort } from '@angular/material/sort';
 import { LocalStorageService } from './services/local-storage.service';
 import { take } from 'rxjs/operators';
 import { ITableConfiguration } from './interfaces/table-configuration.interface';
-import TableTags from './interfaces/table-tags';
-import { VisibleColumnsComponent } from './components/visible-columns/visible-columns.component';
 import {
     IColumnDefinition,
     ColumnType,
-    IFilterColumnsResponse,
     IAdvancedRowMenu,
-    IAdvancedRowDropDown,
-    IFilterOSMColumnsData,
+    IFilterColumnsData,
+    IFilterColumnsResponse,
     IDistinctColumns,
 } from './interfaces/column-definition.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { SortDirectionEnum } from './interfaces/column-definition.interface';
 import { SelectionModel } from '@angular/cdk/collections';
 import { IKeyFilterValues } from './interfaces/key-filter-values.interface';
 import { TableBuilderHelper } from './helpers/table-builder.helper';
 import { Value } from './helpers/values.helper';
 import { FilterColumnsComponent } from './components/filter-columns/filter-columns.component';
-import { getTextFieldFromSelectColumn } from './helpers/filter-osm-columns.helper';
+import { ColumnHelper } from './helpers/columns.helper';
 
 @Component({
     selector: 'ngx-advanced-material-table',
@@ -39,13 +36,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
 
     @Input()
     actionConfiguration?: IAdvancedRowMenu[];
-
-    @Input() set dropdownRows(value: IAdvancedRowDropDown[]) {
-        this.dropdownRowsList = _.cloneDeep(value);
-    }
-    get dropdownRows(): IAdvancedRowDropDown[] {
-        return this.dropdownRowsList;
-    }
 
     @Input()
     set tableColumns(value: IColumnDefinition[]) {
@@ -73,7 +63,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
     }
 
     @Output() actionSelected: EventEmitter<[T, number]> = new EventEmitter();
-    @Output() dropDownSelected: EventEmitter<[T, any]> = new EventEmitter();
     @Output() iconClicked: EventEmitter<[T, IColumnDefinition]> = new EventEmitter();
     @Output() rowSelected: EventEmitter<[boolean, T[]]> = new EventEmitter<[boolean, T[]]>();
     @Output() numberChange: EventEmitter<[T, IColumnDefinition, number]> = new EventEmitter();
@@ -93,8 +82,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
     columnType = ColumnType;
     selection = new SelectionModel<T>(true, []);
 
-    private previousIndex: number = -1;
-    private dropdownRowsList!: IAdvancedRowDropDown[];
     private tableColumnList: IColumnDefinition[] = [];
     private mainFilter = '';
 
@@ -117,7 +104,7 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
                 if (column.Field !== col.active) {
                     column.SortDirection = undefined;
                 } else {
-                    column.SortDirection = col.direction === 'asc' ? SortDirectionEnum.Ascending : SortDirectionEnum.Descending;
+                    column.SortDirection = col.direction as 'asc' | 'desc' | undefined;
                 }
             });
         });
@@ -125,74 +112,36 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         this.initializeTable();
     }
 
-    getElementText(column: IColumnDefinition, element: T): string {
-        if (column.Field.indexOf('.') === -1) {
-            return element[column.Field];
+    getContent = (column: IColumnDefinition, element: T) => ColumnHelper.getContent(column.Field, element);
+    getToolTip = (row: T, column: IColumnDefinition) => ColumnHelper.getToolTip<T>(column, row);
+
+    private initializeTable(): void {
+        if (this.data) {
+            this.noRowsDisplayed = this.data.length === 0;
         }
 
-        // Activate the way to get text from  Class.Element.XX.XX.XX
-        const fieldNames = column.Field.split('.');
+        this.dataSource = new MatTableDataSource<T>(this.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sortingDataAccessor = (item, property) => {
+            const content = ColumnHelper.getContent(property, item);
 
-        let returnValue = element[fieldNames[0]];
-        for (let index = 1; index < fieldNames.length; index++) {
-            returnValue = returnValue[fieldNames[index]];
-        }
+            if (!content) {
+                return '';
+            }
 
-        return returnValue ?? '';
+            return content.toString().toLowerCase();
+        };
+        this.dataSource.sort = this.sort;
+
+        this.dataSource.filterPredicate = this.getFilterPredicate();
+        this.applyFilters();
     }
 
-    isFilteringEnabledOnColumn(column: IColumnDefinition): boolean {
-        if (!this.canColumnBeFiltered(column)) {
-            return false;
-        }
-
-        if (!column.Title) {
-            return false;
-        }
-
-        return true;
-    }
-
-    isHeaderDraggable(column: IColumnDefinition): boolean {
-        if (!this.canColumnBeMoved(column)) {
-            return false;
-        }
-        return true;
-    }
-
-    getRowClassName(): string {
-        const hasImageColumn = this.tableColumns.find((c) => c.ColumnType === ColumnType.Image);
-
-        if (hasImageColumn) {
-            return 'row-with-image';
-        }
-
-        return '';
-    }
-
-    getColumnClassName(column: IColumnDefinition): string {
-        switch (column.ColumnType) {
-            case ColumnType.Actions:
-                return 'actions';
-            case ColumnType.Icon:
-                return 'icons';
-            case ColumnType.Image:
-                return 'images';
-        }
-        return '';
-    }
-
-    isColumnClickable(column: IColumnDefinition): boolean {
-        switch (column.ColumnType) {
-            case ColumnType.Actions:
-            case ColumnType.Icon:
-            case ColumnType.DropDown:
-            case ColumnType.NumberInput:
-            case ColumnType.DropDownDynamic:
-            case ColumnType.CatalogueSelect:
-                return false;
-            default:
-                return true;
+    private renderColumns(): void {
+        this.displayedColumns = this.tableColumns.filter((column) => column.Display === true).map((column) => column.Field);
+        if (this.tableConfiguration.AllowSelect) {
+            // Add the 'select' column at the start
+            this.displayedColumns.unshift('select');
         }
     }
 
@@ -267,107 +216,16 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         };
     }
 
-    isImmutableColumn(column: IColumnDefinition): boolean {
-        // Columns types that cannot be hidden, moved or filtered
-        return column.ColumnType === ColumnType.Actions || column.ColumnType === ColumnType.Icon;
-    }
-
-    canColumnBeHidden(column: IColumnDefinition): boolean {
-        return !this.isImmutableColumn(column);
-    }
-
-    canColumnBeMoved(column: IColumnDefinition): boolean {
-        return !this.isImmutableColumn(column);
-    }
-
-    canColumnBeFiltered(column: IColumnDefinition): boolean {
-        return !this.isImmutableColumn(column);
-    }
-
-    openVisibleColumnsDialog(): void {
-        const visibleColumnsDialog = this.dialog.open(VisibleColumnsComponent, {
-            disableClose: false,
-            autoFocus: false,
-            data: _.cloneDeep(this.tableColumnList.filter((col) => this.canColumnBeHidden(col))),
-            panelClass: 'dialogClose',
-        });
-
-        visibleColumnsDialog
-            .afterClosed()
-            .pipe(take(1))
-            .subscribe((columnsVisible) => {
-                if (columnsVisible) {
-                    this.tableColumnList.map((col) => {
-                        if (this.canColumnBeHidden(col)) {
-                            col.Display = columnsVisible[col.Field];
-                        }
-                    });
-                    this.displayedColumns = this.tableColumns.filter((column) => column.Display === true).map((column) => column.Field);
-                    if (this.tableConfiguration.AllowSelect) {
-                        this.displayedColumns.unshift('select');
-                    }
-                    this.saveColumnConfig();
-                }
-            });
-    }
-
-    openFilterDialog(selectedColumn: IColumnDefinition): void {
-        const data: IFilterOSMColumnsData = {
-            selectedColumn: _.cloneDeep(selectedColumn),
-            distinctData: this.getDistinctValues(selectedColumn),
-        };
-
-        const columnFilteringDialog = this.dialog.open(FilterColumnsComponent, {
-            disableClose: false,
-            autoFocus: false,
-            panelClass: 'dialogClose',
-            data,
-        });
-
-        columnFilteringDialog
-            .afterClosed()
-            .pipe(take(1))
-            .subscribe((response: IFilterColumnsResponse) => {
-                if (response && response.action === 'Ok') {
-                    this.filterTable(response);
-                    this.sortTable(response);
-                }
-            });
-    }
-
-    sendToPrinter(): void {
-        const selectedData = this.getSelectedData();
-        const colNames = this.getDisplayedColumnNames();
-
-        const table = TableBuilderHelper.buildTable(selectedData, this.displayedColumns, colNames);
-
-        if (table) {
-            const newWin = window.open('#');
-            if (!newWin) return;
-            newWin.document.write(TableBuilderHelper.printPageBuilderDefault(table, TableTags.PrintedOn));
-            newWin.print();
-            newWin.close();
-        }
-    }
-
-    //#region Drag and Drop
-    headerDragStarted(index: number) {
-        this.previousIndex = index;
-    }
-
-    headerDropListDropped(event: CdkDragDrop<IColumnDefinition>) {
-        if (!event) {
+    onColumnChange(index: number, event: any): void {
+        if (this.tableColumns[index].Display && this.tableColumns.filter((c) => c.Display).length <= 1) {
+            event.preventDefault();
             return;
         }
-        const previousColumnIndex = this.tableColumns.findIndex((x) => x.Field === this.displayedColumns[event.previousIndex]);
-        const currentColumnIndex = this.tableColumns.findIndex((x) => x.Field === this.displayedColumns[event.currentIndex]);
-        if (this.canColumnBeMoved(this.tableColumns[currentColumnIndex])) {
-            this.moveItemInArray(this.tableColumns, previousColumnIndex, currentColumnIndex);
-            this.renderColumns();
-            this.saveColumnConfig();
-        }
+
+        this.tableColumns[index].Display = !this.tableColumns[index].Display;
+        this.renderColumns();
+        this.saveColumnConfig();
     }
-    //#endregion
 
     clearAllFilters(): void {
         this.tableColumnList.forEach((column: IColumnDefinition) => {
@@ -381,73 +239,12 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         this.dataSource.filter = '[]';
     }
 
-    hasFiltersOrSortingEnabled(column: IColumnDefinition): boolean {
-        if (!column) {
-            return false;
-        }
-
-        if (column.SortDirection === SortDirectionEnum.Ascending || column.SortDirection === SortDirectionEnum.Descending) {
-            return true;
-        }
-
-        if (column.FilterValues && column.FilterValues.length > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
     /**
      * Return from the Action Buttons
      * @param action Value From the Action Buttons
      */
     onActionSelected(action: [T, number]): void {
         this.actionSelected.emit(action);
-    }
-
-    onDropDownSelected(dropdown: [T, any]): void {
-        this.dropDownSelected.emit(dropdown);
-    }
-
-    getToolTip(row: T, column: IColumnDefinition) {
-        if (!row || !column || !row[column.Field]) {
-            return '';
-        }
-
-        let val: string;
-        switch (column.ColumnType) {
-            case ColumnType.Date:
-            case ColumnType.DateTime:
-            case ColumnType.Time:
-                val = row[column.Field];
-                break;
-
-            case ColumnType.Icon:
-            case ColumnType.DropDown:
-            case ColumnType.String:
-                val = row[column.Field];
-                break;
-
-            case ColumnType.DropDownDynamic:
-                const dataDropDown = row[column.Field].find(
-                    (x: boolean) => x[column.SelectedField!.ValueField] === row[column.SelectedField!.SelectField]
-                );
-                if (dataDropDown) {
-                    val = dataDropDown[column.SelectedField!.TextField];
-                } else {
-                    val = '';
-                }
-                break;
-
-            case ColumnType.CatalogueSelect:
-                const catalogData: any = row[column.Field];
-                val = `${catalogData.Name} (${catalogData.Code})`;
-                break;
-            default:
-                val = '';
-                break;
-        }
-        return val;
     }
 
     getMinValueForNumberInput(element: T, column: IColumnDefinition): number | undefined {
@@ -511,38 +308,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         }
     }
 
-    private initializeTable(): void {
-        if (this.data) {
-            this.noRowsDisplayed = this.data.length === 0;
-        }
-
-        this.dataSource = new MatTableDataSource<T>(this.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sortingDataAccessor = (item, property) => {
-            if (!item[property]) {
-                return '';
-            }
-
-            if (item[property] instanceof Date) {
-                return item[property];
-            }
-
-            return item[property].toString().toLowerCase();
-        };
-        this.dataSource.sort = this.sort;
-
-        this.dataSource.filterPredicate = this.getFilterPredicate();
-        this.applyFilters();
-    }
-
-    private renderColumns(): void {
-        this.displayedColumns = this.tableColumns.filter((column) => column.Display === true).map((column) => column.Field);
-        if (this.tableConfiguration.AllowSelect) {
-            // Add the 'select' column at the start
-            this.displayedColumns.unshift('select');
-        }
-    }
-
     private getDistinctValues(selectedColumn: IColumnDefinition): IDistinctColumns[] {
         let result: IDistinctColumns[] = [];
 
@@ -550,13 +315,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
             let value = _.get(row, selectedColumn.Field);
             let displayedValue = value;
 
-            if (selectedColumn.ColumnType === ColumnType.DropDownDynamic) {
-                displayedValue = getTextFieldFromSelectColumn(row, selectedColumn, value);
-                value = _.get(row, selectedColumn.SelectedField!.SelectField);
-            }
-            if (selectedColumn.ColumnType === ColumnType.CatalogueSelect) {
-                displayedValue = value;
-            }
             if (Value.isArray(value)) {
                 value = _.join(value, ',');
                 displayedValue = value;
@@ -567,7 +325,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
             }
 
             const isAlreadyChecked = selectedColumn.FilterValues ? selectedColumn.FilterValues.findIndex((x) => x === value) >= 0 : false;
-            const offsetDay = selectedColumn.ColumnType === ColumnType.Date ? selectedColumn.DayOffset : null;
 
             result.push({
                 name: value,
@@ -581,13 +338,129 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         return result;
     }
 
+    //#region Drag and Drop
+    headerDragStarted(index: number) {}
+
+    headerDropListDropped(event: CdkDragDrop<IColumnDefinition>) {
+        if (!event) {
+            return;
+        }
+        const displayedColumns = this.displayedColumns.filter((x) => x != 'select');
+        const previousColumnIndex = this.tableColumns.findIndex((x) => x.Field === displayedColumns[event.previousIndex]);
+        const currentColumnIndex = this.tableColumns.findIndex((x) => x.Field === displayedColumns[event.currentIndex]);
+        if (this.canColumnBeMoved(this.tableColumns[currentColumnIndex])) {
+            this.moveItemInArray(this.tableColumns, previousColumnIndex, currentColumnIndex);
+            this.renderColumns();
+            this.saveColumnConfig();
+        }
+    }
+    //#endregion
+
     //#region Sorting and Filtering
-    applyFilter(event: any): void {
+
+    applyMainFilter(event: any): void {
         this.mainFilter = event.value.trim().toLowerCase();
         this.applyFilters();
     }
 
-    private filterTable(response: IFilterColumnsResponse): void {
+    private applyFilters(): void {
+        const filters: IKeyFilterValues[] = [];
+
+        this.tableColumnList.forEach((column) => {
+            if (!column.FilterValues) {
+                column.FilterValues = [];
+            }
+
+            //const fieldName = x.SelectedField && x.SelectedField.SelectField ? x.SelectedField.SelectField : x.Field;
+
+            filters.push({
+                key: column.Field,
+                type: column.ColumnType,
+                values: column.FilterValues,
+            });
+        });
+
+        if (filters.length > 0) {
+            this.dataSource.filter = JSON.stringify(filters);
+        }
+    }
+
+    private sortColumn(id: string, start?: 'asc' | 'desc') {
+        const currentColumn = this.sort.active;
+        const currentDirection = this.sort.direction;
+        if (id !== currentColumn || start !== currentDirection) {
+            this.sort.sort({ id: '', start, disableClear: false } as any);
+            this.sort.sort({ id, start, disableClear: false } as any);
+        }
+    }
+
+    private clearSort() {
+        // Clear sort, see https://github.com/angular/components/issues/10524
+        let sortable: any = { id: null, start: null, disableClear: false };
+        this.sort.sort(sortable);
+    }
+
+    private sortColumns(): void {
+        const id = this.tableColumns.findIndex((column) => column.SortDirection);
+        if (id === -1) {
+            return;
+        }
+
+        const columnName = this.tableColumns[id].Field;
+        const direction = this.tableColumns[id].SortDirection;
+
+        this.clearSort();
+
+        if (direction) {
+            this.sortColumn(columnName, direction);
+        }
+
+        // HACK(Fernando Abel): https://github.com/angular/components/issues/10242
+        const activeSortHeader = this.sort.sortables.get(columnName) as MatSortHeader;
+        if (activeSortHeader) {
+            const viewState: ArrowViewStateTransition = activeSortHeader._isSorted()
+                ? { fromState: direction, toState: 'active' }
+                : { fromState: 'active', toState: direction };
+            activeSortHeader._setAnimationTransitionState(viewState);
+        }
+
+        this.cdref.detectChanges();
+    }
+
+    //#endregion
+
+    //#region Dialogs
+
+    openFilterDialog(selectedColumn: IColumnDefinition): void {
+        const data: IFilterColumnsData = {
+            selectedColumn: _.cloneDeep(selectedColumn),
+            distinctData: this.getDistinctValues(selectedColumn),
+        };
+
+        const columnFilteringDialog = this.dialog.open(FilterColumnsComponent, {
+            disableClose: false,
+            autoFocus: false,
+            width: '350px',
+            panelClass: 'overlay-panel',
+            data,
+        });
+
+        columnFilteringDialog
+            .afterClosed()
+            .pipe(take(1))
+            .subscribe((response: IFilterColumnsResponse) => {
+                if (response && response.action === 'Ok') {
+                    this.filterByColumn(response);
+                    this.sortByTable(response);
+                }
+            });
+    }
+
+    //#endregion
+
+    //#region After FilterColumns response
+
+    private filterByColumn(response: IFilterColumnsResponse): void {
         if (!response || !response.selectedColumn) {
             return;
         }
@@ -601,122 +474,63 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         this.applyFilters();
     }
 
-    private applyFilters(): void {
-        const filters: IKeyFilterValues[] = [];
-
-        this.tableColumnList.forEach((x) => {
-            if (!x.FilterValues) {
-                x.FilterValues = [];
-            }
-
-            const fieldName = x.SelectedField && x.SelectedField.SelectField ? x.SelectedField.SelectField : x.Field;
-
-            filters.push({
-                key: fieldName,
-                type: x.ColumnType,
-                values: x.FilterValues,
-            });
-        });
-
-        if (filters.length > 0) {
-            this.dataSource.filter = JSON.stringify(filters);
-        }
-    }
-
-    private sortColumn(id: string, start: 'asc' | 'desc') {
-        const currentColumn = this.sort.active;
-        const currentDirection = this.sort.direction;
-        if (id !== currentColumn || start !== currentDirection) {
-            this.sort.sort({ id: '', start, disableClear: false });
-            this.sort.sort({ id, start, disableClear: false });
-        }
-    }
-
-    private clearSort() {
-        // Clear sort, see https://github.com/angular/components/issues/10524
-        let sortable: MatSortable = { id: '', start: 'asc', disableClear: false };
-        this.sort.sort(sortable);
-    }
-
-    private sortTable(response: IFilterColumnsResponse): void {
+    private sortByTable(response: IFilterColumnsResponse): void {
         if (response.sortingHasChanged === false) {
             return;
         }
 
         const columnName = response.selectedColumn!.Field;
-        const start = response.selectedColumn!.SortDirection;
-
-        this.clearSort();
-
-        if (start) {
-            this.sortColumn(columnName, start);
-        }
-
-        // HACK(Fernando): https://github.com/angular/components/issues/10242
-        const activeSortHeader = this.sort.sortables.get(columnName) as MatSortHeader;
-        if (activeSortHeader) {
-            const viewState: ArrowViewStateTransition = activeSortHeader._isSorted()
-                ? { fromState: start, toState: 'active' }
-                : { fromState: 'active', toState: start };
-            activeSortHeader._setAnimationTransitionState(viewState);
-        }
+        const direction = response.selectedColumn!.SortDirection;
 
         this.tableColumnList.forEach((column) => {
-            column.SortDirection = column.Field !== response.selectedColumn!.Field ? undefined : response.selectedColumn!.SortDirection;
+            column.SortDirection = column.Field !== columnName ? undefined : direction;
         });
-    }
 
-    private sortColumns(): void {
-        const id = this.tableColumns.findIndex((column) => column.SortDirection);
-        if (id !== -1) {
-            const columnName = this.tableColumns[id].Field;
-            const start = this.tableColumns[id].SortDirection;
-
-            this.sortColumn(columnName, start ?? 'asc');
-
-            // HACK(Fernando Abel): https://github.com/angular/components/issues/10242
-            const activeSortHeader = this.sort.sortables.get(columnName) as MatSortHeader;
-            if (activeSortHeader) {
-                const viewState: ArrowViewStateTransition = activeSortHeader._isSorted()
-                    ? { fromState: start, toState: 'active' }
-                    : { fromState: 'active', toState: start };
-                activeSortHeader._setAnimationTransitionState(viewState);
-            }
-
-            this.cdref.detectChanges();
-        }
+        this.sortColumns();
     }
 
     //#endregion
 
-    //#region Export to Excel
+    //#region Print and Export
+
+    sendToPrinter(): void {
+        const selectedData = this.getDataToExportPrint();
+        const colNames = this.getDisplayedColumnNames();
+
+        const table = TableBuilderHelper.buildTable(selectedData, this.displayedColumns, colNames);
+
+        if (table) {
+            const newWin = window.open('#');
+            if (!newWin) return;
+            newWin.document.write(TableBuilderHelper.printPageBuilderDefault(table));
+            newWin.print();
+            newWin.close();
+        }
+    }
 
     // TODO: Create a service for that, currently being used in advanced-osm-table and osm-table
     exportToExcel(): void {
-        const tableTitle = TableTags.Table;
-        const selectedData = this.getSelectedDataWithDisplayedColumnsOnly();
-        const colNames = this.getDisplayedColumnNames();
-
-        // generate a worksheet
-        const ws = xlsx.utils.aoa_to_sheet([colNames]);
-        xlsx.utils.sheet_add_json(ws, selectedData, {
-            header: this.displayedColumns.slice(1), // remove the 'select' column
-            skipHeader: true,
-            origin: 1,
-        });
-
-        // add to workbook
-        const wb = xlsx.utils.book_new();
-        xlsx.utils.book_append_sheet(wb, ws, tableTitle);
-
-        // write workbook and force a download
-        xlsx.writeFile(wb, `${tableTitle}.xls`, {
-            type: 'array',
-            bookType: 'xls',
-        });
+        // const tableTitle = TableTags.Table;
+        // const selectedData = this.getSelectedDataWithDisplayedColumnsOnly();
+        // const colNames = this.getDisplayedColumnNames();
+        // // generate a worksheet
+        // const ws = xlsx.utils.aoa_to_sheet([colNames]);
+        // xlsx.utils.sheet_add_json(ws, selectedData, {
+        //     header: this.displayedColumns.slice(1), // remove the 'select' column
+        //     skipHeader: true,
+        //     origin: 1,
+        // });
+        // // add to workbook
+        // const wb = xlsx.utils.book_new();
+        // xlsx.utils.book_append_sheet(wb, ws, tableTitle);
+        // // write workbook and force a download
+        // xlsx.writeFile(wb, `${tableTitle}.xls`, {
+        //     type: 'array',
+        //     bookType: 'xls',
+        // });
     }
 
-    private getSelectedData(): T[] {
+    private getDataToExportPrint(): T[] {
         if (!this.selection.isEmpty()) {
             return this.selection.selected;
         }
@@ -728,7 +542,7 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
     }
 
     private getSelectedDataWithDisplayedColumnsOnly(): Partial<T>[] {
-        const selectedData = this.getSelectedData();
+        const selectedData = this.getDataToExportPrint();
 
         return _.map(selectedData, (obj) => {
             return _.pick(obj, this.displayedColumns);
@@ -741,14 +555,13 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
 
     //#endregion
 
+    //#region LocalStorage
     private loadFromStorage(): void {
         if (!this.tableConfiguration || !this.tableConfiguration.LocalStorageKey) {
             return;
         }
 
-        const localStorageColumns = this.localStorageService.getAsJson(
-            this.tableConfiguration.LocalStorageKey
-        ) as IColumnDefinition[];
+        const localStorageColumns = this.localStorageService.getAsJson(this.tableConfiguration.LocalStorageKey) as IColumnDefinition[];
 
         if (!localStorageColumns) {
             return;
@@ -781,6 +594,9 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
         array[previousIndex] = array[index];
         array[index] = temp;
     }
+    //#endregion
+
+    //#region Paginator
 
     private localizePaginator(): void {
         if (!this.tableConfiguration.AllowPagination) {
@@ -791,22 +607,60 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
             return;
         }
 
-        this.paginator._intl.firstPageLabel = TableTags.FirstPage;
-        this.paginator._intl.previousPageLabel = TableTags.PreviousPage;
-        this.paginator._intl.nextPageLabel = TableTags.NextPage;
-        this.paginator._intl.lastPageLabel = TableTags.LastPage;
-        this.paginator._intl.itemsPerPageLabel = TableTags.ItemsPerPage;
+        this.paginator._intl.firstPageLabel = 'First Page';
+        this.paginator._intl.previousPageLabel = 'Previous Page';
+        this.paginator._intl.nextPageLabel = 'Next Page';
+        this.paginator._intl.lastPageLabel = 'Last Page';
+        this.paginator._intl.itemsPerPageLabel = 'Items per Page';
 
         this.paginator._intl.getRangeLabel = (page: number, pageSize: number, length: number) => {
             if (length === 0 || pageSize === 0) {
-                return `0 of ${length}`; //TableTags.PageRangeEmpty
+                return `0 of ${length}`;
             }
 
             length = Math.max(length, 0);
             const startIndex = page * pageSize;
             // If the start index exceeds the list length, do not try and fix the end index to the end.
             const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
-            return `${startIndex + 1} - ${endIndex} of ${length}`; // PageRange
+            return `${startIndex + 1} - ${endIndex} of ${length}`;
         };
     }
+
+    //#endregion
+
+    //#region ClassNames
+    getRowClassName(): string {
+        const hasImageColumn = this.tableColumns.find((c) => c.ColumnType === ColumnType.Image);
+
+        if (hasImageColumn) {
+            return 'row-with-image';
+        }
+
+        return '';
+    }
+
+    getColumnClassName(column: IColumnDefinition): string {
+        switch (column.ColumnType) {
+            case ColumnType.Actions:
+                return 'actions';
+            case ColumnType.Icon:
+                return 'icons';
+            case ColumnType.Image:
+                return 'images';
+        }
+        return '';
+    }
+    //#endregion
+
+    //#region Checks (Header, Cell, Column or Row)
+
+    isImmutableColumn = ColumnHelper.isImmutableColumn;
+    canColumnBeHidden = ColumnHelper.canColumnBeHidden;
+    canColumnBeMoved = ColumnHelper.canColumnBeMoved;
+    canColumnBeFiltered = ColumnHelper.canColumnBeFiltered;
+    isFilteringEnabledOnColumn = ColumnHelper.isFilteringEnabledOnColumn;
+    hasFiltersOrSortingEnabled = ColumnHelper.hasFiltersOrSortingEnabled;
+    isCellClickable = ColumnHelper.isCellClickable;
+
+    //#endregion
 }

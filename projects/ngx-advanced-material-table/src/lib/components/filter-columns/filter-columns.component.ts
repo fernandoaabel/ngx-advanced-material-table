@@ -4,13 +4,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import {
     IColumnDefinition,
+    ColumnType,
     IDistinctColumns,
     IFilterColumnsResponse,
-    ColumnType,
-    IFilterOSMColumnsData,
+    IFilterColumnsData,
 } from '../../interfaces/column-definition.interface';
 import { Value } from '../../helpers/values.helper';
-import { DialogActionType } from '../../interfaces/dialog-action.interface';
+import { DialogActionType } from '../../interfaces/enums/dialog-action.enum';
 
 @Component({
     selector: 'filter-columns',
@@ -29,7 +29,7 @@ export class FilterColumnsComponent implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<FilterColumnsComponent>,
         private fb: FormBuilder,
-        @Inject(MAT_DIALOG_DATA) public context: IFilterOSMColumnsData
+        @Inject(MAT_DIALOG_DATA) public context: IFilterColumnsData
     ) {
         this.selectedColumn = this.context.selectedColumn;
         this.distinctColumnValues = this.sortColumns(this.context.distinctData);

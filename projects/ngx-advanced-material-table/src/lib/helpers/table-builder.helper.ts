@@ -1,3 +1,5 @@
+import { ColumnHelper } from './columns.helper';
+
 export class TableBuilderHelper {
     static buildTable<T>(dataArray: T[], columns: string[], columnNames: string[]): string {
         let out = '<table><thead><tr>';
@@ -9,7 +11,7 @@ export class TableBuilderHelper {
             out += '<tr>';
             for (const j of columns) {
                 if (j !== 'select' && j !== 'actions') {
-                    out += '<td>' + (data[j] || '-') + '</td>';
+                    out += '<td>' + (ColumnHelper.getContent(j, data) || '-') + '</td>';
                 }
             }
             out += '</tr>';
@@ -18,7 +20,7 @@ export class TableBuilderHelper {
         return out;
     }
 
-    static printPageBuilderDefault(table: string, printedOnLabel: string): string {
+    static printPageBuilderDefault(table: string, printedOnLabel: string = 'Printed On'): string {
         return (
             '<html><head>' +
             '<style type="text/css" media="print">' +

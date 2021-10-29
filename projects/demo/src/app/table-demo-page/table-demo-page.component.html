@@ -1,0 +1,31 @@
+<p>
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>Demo | ngx-advanced-material-table</span>
+            <span class="example-spacer"></span>
+
+            <a
+                mat-icon-button
+                class="example-icon"
+                aria-label="Share"
+                target="_blank"
+                href="https://github.com/fernandoaabel/ngx-advanced-material-table"
+            >
+                <mat-icon>open_in_new</mat-icon>
+            </a>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</p>
+
+<div>
+    <ngx-advanced-material-table
+        [data]="data"
+        [tableConfiguration]="TABLE_CONFIG"
+        [tableColumns]="COLUMNS_CONFIG_LIST"
+    ></ngx-advanced-material-table>
+    <!-- (iconClicked)="onIconClicked($event)" -->
+    <!-- (rowSelected)="onRowSelection($event)" -->
+</div>

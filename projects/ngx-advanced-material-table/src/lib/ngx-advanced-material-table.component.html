@@ -2,22 +2,11 @@
     <div class="table-top-panel" *ngIf="tableConfiguration.AllowFilter || tableConfiguration.AllowActions">
         <div class="table-filter">
             <ng-container *ngIf="tableConfiguration.AllowFilter">
-                <button
-                    mat-icon-button
-                    id="{{ tableConfiguration.Id }}-table-export-to-excel-button"
-                    title="Export To Excel"
-                    i18n-title="@@tooltip-text-exportExcel"
-                    (click)="exportToExcel()"
-                    [disabled]="noRowsDisplayed"
-                >
-                    <mat-icon>drive_folder_upload</mat-icon>
-                </button>
-
                 <mat-form-field>
                     <input
                         matInput
                         id="{{ tableConfiguration.Id }}-table-filter-field"
-                        (keyup)="applyFilter($event.target)"
+                        (keyup)="applyMainFilter($event.target)"
                         i18n-placeholder="@@placeholder-text-filterResult"
                         placeholder="Filter on results..."
                     />
@@ -33,31 +22,67 @@
                 (click)="clearAllFilters()"
                 [matTooltip]="templateClearAllFilters.innerText"
             >
-                <img src="./assets/images/icons/clear-filters.svg" />
+                <mat-icon>filter_list_off</mat-icon>
             </button>
 
-            <button
+            <!-- <button
                 mat-icon-button
                 id="{{ tableConfiguration.Id }}-table-showColumns"
                 onclick="this.blur()"
                 (click)="openVisibleColumnsDialog()"
                 [matTooltip]="templateShowHide.innerText"
             >
-                <mat-icon>tune</mat-icon>
+                <mat-icon>view_column</mat-icon>
+            </button> -->
+
+            <button
+                mat-icon-button
+                id="{{ tableConfiguration.Id }}-table-showColumns"
+                [matMenuTriggerFor]="visibleColumnsMenu"
+                [matTooltip]="templateShowHide.innerText"
+            >
+                <mat-icon>view_column</mat-icon>
+            </button>
+
+            <mat-menu #visibleColumnsMenu="matMenu">
+                <ng-template matMenuContent>
+                    <div id="{{ tableConfiguration.Id }}-table-columns-checkbox">
+                        <div
+                            mat-menu-item
+                            *ngFor="let column of tableColumns; let i = index"
+                            (click)="onColumnChange(i, $event); $event.stopPropagation()"
+                        >
+                            <mat-icon *ngIf="column.Display" color="accent">check_box</mat-icon>
+                            <mat-icon *ngIf="!column.Display">check_box_outline_blank</mat-icon>
+                            <span>{{ column.Title }}</span>
+                        </div>
+                    </div>
+                </ng-template>
+            </mat-menu>
+
+            <button
+                mat-icon-button
+                id="{{ tableConfiguration.Id }}-table-export-to-excel-button"
+                [matTooltip]="templateExportCsv.innerText"
+                (click)="exportToExcel()"
+                [disabled]="noRowsDisplayed"
+            >
+                <mat-icon>file_download</mat-icon>
             </button>
 
             <button
                 mat-icon-button
                 id="{{ tableConfiguration.Id }}-table-print-button"
                 (click)="sendToPrinter()"
-                [disabled]="noRowsDisplayed"
                 [matTooltip]="templatePrint.innerText"
+                [disabled]="noRowsDisplayed"
             >
                 <mat-icon>print</mat-icon>
             </button>
 
-            <template #templateShowHide i18n="@@table-tooltip-grid-showColumns">Show/hide columns</template>
-            <template #templateClearAllFilters i18n="@@table-tooltip-clear-all-filters">Clear all filters/sorting</template>
+            <template #templateShowHide i18n="@@table-tooltip-grid-showColumns">Select visible columns</template>
+            <template #templateExportCsv i18n="@@table-tooltip-export-csv">Export to Excel</template>
+            <template #templateClearAllFilters i18n="@@table-tooltip-clear-all-filters">Clear filters and sorting</template>
             <template #templatePrint i18n="@@action-btn-print">Print</template>
         </div>
     </div>
@@ -74,13 +99,14 @@
         id="{{ tableConfiguration.Id }}-table"
         [dataSource]="dataSource"
         matSort
+        matSortDisableClear="false"
         cdkDropListGroup
         cdkDropList
         cdkDropListLockAxis="x"
         cdkDropListOrientation="horizontal"
         (cdkDropListDropped)="headerDropListDropped($event)"
     >
-        <!-- Checkbox Column -->
+        <!-- Select Check Box Column -->
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
                 <mat-checkbox
@@ -106,8 +132,8 @@
                 *matHeaderCellDef
                 cdkDrag
                 (cdkDragStarted)="headerDragStarted(i)"
-                [cdkDragData]="{ name: column.Field, columIndex: i }"
-                [cdkDragDisabled]="!isHeaderDraggable(column)"
+                [cdkDragData]="{ name: column.Field }"
+                [cdkDragDisabled]="!canColumnBeMoved(column)"
                 [ngClass]="getColumnClassName(column)"
                 [matTooltip]="column.Title"
             >
@@ -128,24 +154,26 @@
             <mat-cell
                 *matCellDef="let element; let rowIndex = index"
                 [ngClass]="getColumnClassName(column)"
-                (click)="isColumnClickable(column) ? onRowChecked(element) : null"
+                (click)="isCellClickable(column) ? onRowChecked(element) : null"
             >
-                <div matTooltipClass="osm-table-tooltip" [matTooltip]="getToolTip(element, column)">
+                <div [matTooltip]="getToolTip(element, column)">
                     <ng-container [ngSwitch]="column.ColumnType">
                         <!-- DateTime -->
-                        <span *ngSwitchCase="columnType.DateTime"> {{ getElementText(column, element) }}</span>
+                        <span *ngSwitchCase="columnType.DateTime"> {{ getContent(column, element) }}</span>
                         <!-- Date -->
-                        <span *ngSwitchCase="columnType.Date"> {{ getElementText(column, element) }}</span>
+                        <span *ngSwitchCase="columnType.Date"> {{ getContent(column, element) }}</span>
                         <!-- Time -->
-                        <span *ngSwitchCase="columnType.Time"> {{ getElementText(column, element) }}</span>
+                        <span *ngSwitchCase="columnType.Time"> {{ getContent(column, element) }}</span>
                         <!-- String -->
-                        <span
-                            *ngSwitchCase="columnType.String"
-                            [class.clickable]="column.HyperLink"
-                            (click)="onHyperLinkClicked(element, column)"
-                        >
-                            {{ getElementText(column, element) }}</span
-                        >
+                        <span *ngSwitchCase="columnType.String"> {{ getContent(column, element) }}</span>
+                        <!-- Link -->
+                        <span *ngSwitchCase="columnType.Link" (click)="onHyperLinkClicked(element, column)">
+                            <a href="{{ getContent(column, element) }}" target="_blank">{{ getContent(column, element) }}</a>
+                        </span>
+                        <!-- Image -->
+                        <div *ngSwitchCase="columnType.Image">
+                            <img src="{{ getContent(column, element) }}" />
+                        </div>
                         <!-- Actions -->
                         <!-- <ng-container *ngSwitchCase="columnType.Actions">
                             <app-advance-osm-table-row-menu
@@ -171,7 +199,7 @@
                                 (click)="iconClick(element, column)"
                             >
                                 <mat-icon> {{ column.MatIconName }}</mat-icon>
-                                {{ element[column.Field] }}
+                                {{ getContent(column, element) }}
                             </button>
                         </ng-container>
                         <!-- Number Input -->
@@ -200,21 +228,6 @@
                                 (dropDownSelected)="onDropDownSelected($event)"
                             ></app-advanced-osm-table-row-dynamic-dropdown>
                         </ng-container> -->
-                        <!-- Catalogue Selector -->
-                        <!-- <ng-container *ngSwitchCase="columnType.CatalogueSelect">
-                            <app-advanced-osm-table-row-catalogue-select
-                                [rowData]="element"
-                                [columnData]="column"
-                                [index]="rowIndex"
-                                (catalogueClicked)="onCatalogueClicked($event, column)"
-                                (searchClicked)="onCatalogueSearchClicked($event, column)"
-                                (clearClicked)="onCatalogueClearClicked($event, column)"
-                            ></app-advanced-osm-table-row-catalogue-select>
-                        </ng-container> -->
-                        <!-- Image -->
-                        <ng-container *ngSwitchCase="columnType.Image">
-                            <img src="{{ element[column.Field] }}" />
-                        </ng-container>
                     </ng-container>
                     <!-- Suffix -->
                     <span class="suffix" *ngIf="column.Suffix && column.ColumnType !== columnType.NumberInput">

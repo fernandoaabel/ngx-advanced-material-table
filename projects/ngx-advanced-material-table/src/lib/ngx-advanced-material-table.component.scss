@@ -1,8 +1,8 @@
 @import '~@angular/material/theming';
-@import 'variables';
+@import './styles/variables.scss';
 
-$grid-small-fontsize: 12px;
-$grid-cell-fontsize: 13px;
+$mat-rows-size: 40px;
+$mat-cell-image-width: 100px;
 
 .mat-table {
     border: 1px solid rgba(0, 0, 0, 0.12);
@@ -20,11 +20,12 @@ $grid-cell-fontsize: 13px;
     align-items: stretch;
 
     &:hover {
-        background-color: map-get($mat-osm-blue, 300);
+        // TODO: Add color based on theme
+        background-color: #4d74a8; // map-get($mat-primary, 300);
 
         .mat-cell,
         .mat-icon {
-            color: mat-contrast($mat-osm-blue, 300);
+            color: $light-primary-text; // mat-contrast($mat-primary, 300);
         }
     }
 }
@@ -70,15 +71,6 @@ $grid-cell-fontsize: 13px;
     justify-content: flex-end;
     align-items: center;
     flex: 0 1 auto;
-    color: map-get($mat-osm-blue, 950);
-    .mat-icon {
-        color: map-get($mat-osm-blue, 500);
-        font-size: 1.2em;
-    }
-    img {
-        height: 1em;
-        width: 1.333em;
-    }
 }
 
 .table-pagination {
@@ -89,7 +81,8 @@ $grid-cell-fontsize: 13px;
 
     h4 {
         margin: 0;
-        color: map-get($mat-osm-blue, 500);
+        // TODO: Add color from theme
+        //color: map-get($mat-primary, 500);
         text-transform: uppercase;
         font-weight: bold;
     }
@@ -98,14 +91,9 @@ $grid-cell-fontsize: 13px;
         background: transparent;
     }
 
-    .mat-small {
-        font-size: $grid-small-fontsize;
-    }
-
     .mat-form-field {
         width: 4em;
         margin: 0 0.2em 0 0.5em;
-        font-size: $grid-small-fontsize;
     }
 }
 
@@ -123,11 +111,11 @@ $grid-cell-fontsize: 13px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: $grid-cell-fontsize;
         font-weight: bold;
 
         &.selected {
-            color: map-get($mat-osm-orange, 500) !important;
+            // TODO(Fernando Abel): Color to be set based on theme
+            // color: map-get($mat-color, 500) !important;
         }
     }
 }
@@ -149,8 +137,8 @@ $grid-cell-fontsize: 13px;
         }
 
         img {
-            max-height: 55px;
-            max-width: 60px;
+            height: 55px;
+            min-width: 100px;
             margin: 0;
         }
     }
@@ -168,13 +156,8 @@ $grid-cell-fontsize: 13px;
 
     &.images {
         padding: 2px;
-        min-width: 60px;
+        min-width: 100px;
         flex: none;
         justify-content: center;
     }
-}
-
-app-advanced-osm-table-row-dynamic-dropdown,
-app-advanced-osm-table-row-catalogue-select {
-    width: 100%;
 }

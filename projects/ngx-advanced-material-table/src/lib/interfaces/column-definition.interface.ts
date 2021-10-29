@@ -1,10 +1,4 @@
-import { DialogActionType } from './dialog-action.interface';
-
-export enum SortDirectionEnum {
-    None = '',
-    Ascending = 'asc',
-    Descending = 'desc',
-}
+import { DialogActionType } from './enums/dialog-action.enum';
 
 export type ColumnValueType = string | number | Date;
 
@@ -18,10 +12,13 @@ export enum ColumnType {
     Icon,
     NumberInput,
     DropDownDynamic,
-    CatalogueSelect,
     Image,
+    Link,
 }
 
+/**
+ * IColumnDefinitionBase used to
+ */
 export interface IColumnDefinitionBase {
     Field: string;
     Title: string;
@@ -30,11 +27,9 @@ export interface IColumnDefinitionBase {
 }
 
 export interface IColumnDefinition extends IColumnDefinitionBase {
-    I18nId: string;
     ColumnType: ColumnType;
     MatIconName?: string;
     IdField?: string;
-    DayOffset?: number;
     FilterValues?: ColumnValueType[];
     NumberInputOptions?: {
         MinInputNumber?: number;
@@ -44,17 +39,19 @@ export interface IColumnDefinition extends IColumnDefinitionBase {
     };
 
     /**
-     * Selected Field Value
-     */
-    SelectedField?: IAdvanceRowDynamicDropDown;
-
-    /**
      * Add another Field's value as a Suffix for the current field
      */
     Suffix?: {
         Field: string;
     };
-    HyperLink?: boolean;
+}
+
+export interface IAdvancedRowMenu {
+    Id: string;
+    Icon: string;
+    Action: number;
+    Text: string;
+    I18nId: string;
 }
 
 export interface IDistinctColumns {
@@ -68,29 +65,8 @@ export interface IFilterColumnsResponse {
     sortingHasChanged?: boolean;
     selectedColumn?: IColumnDefinition;
 }
-export interface IFilterOSMColumnsData {
+
+export interface IFilterColumnsData {
     selectedColumn: IColumnDefinition;
     distinctData: IDistinctColumns[];
-}
-
-export interface IAdvancedRowMenu {
-    Id: string;
-    Icon: string;
-    Action: number;
-    Text: string;
-    I18nId: string;
-}
-
-export interface IAdvancedRowDropDown {
-    Id: string;
-    Text: string;
-    Value: any;
-    RowField: string;
-    I18nId: string;
-}
-
-export interface IAdvanceRowDynamicDropDown {
-    TextField: string;
-    SelectField: string;
-    ValueField: string;
 }

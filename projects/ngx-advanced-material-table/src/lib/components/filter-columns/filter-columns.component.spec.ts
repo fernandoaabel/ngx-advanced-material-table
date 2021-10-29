@@ -3,9 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from '../../modules/material/material.module';
-
 import { FilterColumnsComponent } from './filter-columns.component';
-import { ColumnType, IFilterOSMColumnsData, SortDirectionEnum } from '../../interfaces/column-definition.interface';
+import { ColumnType, IFilterColumnsData } from '../../interfaces/column-definition.interface';
 import { FilterColumnValuesPipe } from '../../pipes/filter.pipe';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
@@ -92,7 +91,7 @@ describe('Filter OSM Columns Component', () => {
         component.onSortingValueChange('asc');
 
         // ASSERT
-        expect(component.selectedColumn.SortDirection).toContain(SortDirectionEnum.Ascending);
+        expect(component.selectedColumn.SortDirection).toContain('asc');
     });
 
     it('should change value to descending', () => {
@@ -100,7 +99,7 @@ describe('Filter OSM Columns Component', () => {
         component.onSortingValueChange('desc');
 
         // ASSERT
-        expect(component.selectedColumn.SortDirection).toContain(SortDirectionEnum.Descending);
+        expect(component.selectedColumn.SortDirection).toContain('desc');
     });
 
     it('should change value to empty when ascending is clicked again', () => {
@@ -127,12 +126,11 @@ describe('Filter OSM Columns Component', () => {
     });
 });
 
-const MockOSMColumnsData: IFilterOSMColumnsData = {
+const MockOSMColumnsData: IFilterColumnsData = {
     selectedColumn: {
         Field: 'string',
         Title: 'string',
         Display: true,
-        I18nId: 'string',
         ColumnType: ColumnType.String,
     },
     distinctData: [
