@@ -39,7 +39,9 @@
                             "projects/ngx-advanced-material-table/tsconfig.lib.json",
                             "projects/ngx-advanced-material-table/tsconfig.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
@@ -67,8 +69,14 @@
                         "polyfills": "projects/demo/src/polyfills.ts",
                         "tsConfig": "projects/demo/tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
-                        "assets": ["projects/demo/src/favicon.ico", "projects/demo/src/assets"],
-                        "styles": ["./node_modules/@angular/material/prebuilt-themes/indigo-pink.css", "projects/demo/src/styles.scss"],
+                        "assets": [
+                            "projects/demo/src/favicon.ico",
+                            "projects/demo/src/assets"
+                        ],
+                        "styles": [
+                            "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+                            "projects/demo/src/styles.scss"
+                        ],
                         "scripts": []
                     },
                     "configurations": {
@@ -76,13 +84,13 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "500kb",
-                                    "maximumError": "1mb"
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "2kb",
-                                    "maximumError": "4kb"
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
                                 }
                             ],
                             "fileReplacements": [
@@ -130,8 +138,14 @@
                         "tsConfig": "projects/demo/tsconfig.spec.json",
                         "karmaConfig": "projects/demo/karma.conf.js",
                         "inlineStyleLanguage": "scss",
-                        "assets": ["projects/demo/src/favicon.ico", "projects/demo/src/assets"],
-                        "styles": ["./node_modules/@angular/material/prebuilt-themes/indigo-pink.css", "projects/demo/src/styles.scss"],
+                        "assets": [
+                            "projects/demo/src/favicon.ico",
+                            "projects/demo/src/assets"
+                        ],
+                        "styles": [
+                            "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+                            "projects/demo/src/styles.scss"
+                        ],
                         "scripts": []
                     }
                 },
@@ -143,7 +157,9 @@
                             "projects/demo/tsconfig.spec.json",
                             "projects/demo/e2e/tsconfig.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
