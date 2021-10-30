@@ -1,0 +1,30 @@
+name: GitHub Packages Publish
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+    permissions: 
+      contents: read
+      packages: write 
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@fernandoaabel'
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --access public
+        working-directory: dist/ngx-advanced-material-table/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
