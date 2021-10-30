@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MaterialModule } from '../../modules/material/material.module';
+import { MaterialModule } from '../../modules/material.module';
 import { FilterColumnsComponent } from './filter-columns.component';
 import { ColumnType, IFilterColumnsData } from '../../interfaces/column-definition.interface';
 import { FilterColumnValuesPipe } from '../../pipes/filter.pipe';
