@@ -10,7 +10,8 @@
         "test": "ng test",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
-        "deploy": "npm run build & npx angular-cli-ghpages --repo --dir /dist/demo/"
+        "pre-deploy": "npm run build & npm run build:demo",
+        "deploy": "npx angular-cli-ghpages --dir /dist/demo/"
     },
     "private": true,
     "dependencies": {
