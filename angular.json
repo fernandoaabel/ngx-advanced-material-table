@@ -167,6 +167,7 @@
                     "options": {
                         "baseHref": "https://fernandoaabel.github.io/ngx-advanced-material-table/",
                         "name": "Fernando Abel",
+                        "email": "fernandoaabel@gmail.com",
                         "dir": "dist/demo"
                     }
                 }
