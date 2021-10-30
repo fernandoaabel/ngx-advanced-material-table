@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 15.x]
+        node-version: [15.x]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -30,7 +30,7 @@ jobs:
       - run: npm run build
       - run: npm run build:demo
     # - run: npm test -- --coverage
-      - name: SonarCloud Scan
+      - name: SonarCloud Scan -X 
         if: startsWith(matrix.node-version, '15')
         uses: sonarsource/sonarcloud-github-action@master
         env:
