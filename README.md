@@ -5,6 +5,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 [![ci](https://github.com/fernandoaabel/ngx-advanced-material-table/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fernandoaabel/ngx-advanced-material-table/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandoaabel_ngx-advanced-material-table&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fernandoaabel_ngx-advanced-material-table)
 
+
+# Live Demo
+https://fernandoaabel.github.io/ngx-advanced-material-table/demo
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
