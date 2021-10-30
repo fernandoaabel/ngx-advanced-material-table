@@ -23,7 +23,7 @@ export class Value {
     }
 
     static isNumber(value: any): boolean {
-        if (Value.isNotNullOrUndefined(value) && /^[0-9]+(\.[0-9]+){0,1}$/.test(value.toString())) {
+        if (Value.isNotNullOrUndefined(value) && /^\d+(\.\d+)?$/.test(value.toString())) {
             return true;
         }
         return false;
@@ -107,18 +107,14 @@ export class Value {
             return false;
         }
 
-        // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < sourceList.length; i++) {
-            const source = sourceList[i];
-            if (source) {
-                if (caseSensitive) {
-                    if (source.indexOf(toBeMatched) !== -1) {
-                        return true;
-                    }
-                } else {
-                    if (source.toLocaleLowerCase().indexOf(toBeMatched.toLocaleLowerCase()) !== -1) {
-                        return true;
-                    }
+        for (const source of sourceList) {
+            if (caseSensitive) {
+                if (source.indexOf(toBeMatched) !== -1) {
+                    return true;
+                }
+            } else {
+                if (source.toLocaleLowerCase().indexOf(toBeMatched.toLocaleLowerCase()) !== -1) {
+                    return true;
                 }
             }
         }

@@ -25,16 +25,6 @@
                 <mat-icon>filter_list_off</mat-icon>
             </button>
 
-            <!-- <button
-                mat-icon-button
-                id="{{ tableConfiguration.Id }}-table-showColumns"
-                onclick="this.blur()"
-                (click)="openVisibleColumnsDialog()"
-                [matTooltip]="templateShowHide.innerText"
-            >
-                <mat-icon>view_column</mat-icon>
-            </button> -->
-
             <button
                 mat-icon-button
                 id="{{ tableConfiguration.Id }}-table-showColumns"
@@ -168,11 +158,11 @@
                         <span *ngSwitchCase="columnType.String"> {{ getContent(column, element) }}</span>
                         <!-- Link -->
                         <span *ngSwitchCase="columnType.Link" (click)="onHyperLinkClicked(element, column)">
-                            <a href="{{ getContent(column, element) }}" target="_blank">{{ getContent(column, element) }}</a>
+                            <a href="{{ getContent(column, element) }}" target="_blank" rel="noopener">{{ getContent(column, element) }}</a>
                         </span>
                         <!-- Image -->
                         <div *ngSwitchCase="columnType.Image">
-                            <img src="{{ getContent(column, element) }}" />
+                            <img src="{{ getContent(column, element) }}" alt="image" />
                         </div>
                         <!-- Actions -->
                         <!-- <ng-container *ngSwitchCase="columnType.Actions">
@@ -220,14 +210,6 @@
                                 </span>
                             </mat-form-field>
                         </ng-container>
-                        <!-- Dropdown Dynamic -->
-                        <!-- <ng-container *ngSwitchCase="columnType.DropDownDynamic">
-                            <app-advanced-table-row-dynamic-dropdown
-                                [rowData]="element"
-                                [columnData]="column"
-                                (dropDownSelected)="onDropDownSelected($event)"
-                            ></app-advanced-table-row-dynamic-dropdown>
-                        </ng-container> -->
                     </ng-container>
                     <!-- Suffix -->
                     <span class="suffix" *ngIf="column.Suffix && column.ColumnType !== columnType.NumberInput">

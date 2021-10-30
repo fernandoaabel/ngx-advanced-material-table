@@ -3,8 +3,6 @@ import { IDistinctColumns } from '../interfaces/column-definition.interface';
 
 @Pipe({ name: 'filterCriteria' })
 export class FilterColumnValuesPipe implements PipeTransform {
-    constructor() {}
-
     transform(items: IDistinctColumns[], searchText: string): IDistinctColumns[] {
         if (!items) {
             return [];

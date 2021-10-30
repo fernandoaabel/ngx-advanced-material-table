@@ -1,5 +1,4 @@
 @import '~@angular/material/theming';
-@import './styles/variables.scss';
 
 $mat-rows-size: 40px;
 $mat-cell-image-width: 100px;
@@ -26,6 +25,28 @@ $mat-cell-image-width: 100px;
         .mat-cell,
         .mat-icon {
             color: $light-primary-text; // mat-contrast($mat-primary, 300);
+        }
+    }
+
+    &.row-with-image {
+        height: 55px;
+    }
+
+    .mat-cell {
+        > div {
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .mat-form-field {
+            min-width: 50%;
+        }
+
+        img {
+            height: 55px;
+            min-width: 100px;
+            margin: 0;
         }
     }
 }
@@ -116,30 +137,6 @@ $mat-cell-image-width: 100px;
         &.selected {
             // TODO(Fernando Abel): Color to be set based on theme
             // color: map-get($mat-color, 500) !important;
-        }
-    }
-}
-
-.mat-row {
-    &.row-with-image {
-        height: 55px;
-    }
-
-    .mat-cell {
-        > div {
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .mat-form-field {
-            min-width: 50%;
-        }
-
-        img {
-            height: 55px;
-            min-width: 100px;
-            margin: 0;
         }
     }
 }

@@ -5,6 +5,5 @@ export const customTooltipDefaults: MatTooltipDefaultOptions = {
     showDelay: 1000,
     hideDelay: 200,
     touchendHideDelay: 100,
-    // TODO(Fernando Abel): https://github.com/angular/components/issues/8817
-    // touchGestures: 'auto' - Available for Angular 9+
+    touchGestures: 'auto',
 };

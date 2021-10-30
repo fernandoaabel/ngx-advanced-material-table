@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { DataService, Person } from '../shared/services/data.service';
 import { COLUMNS_CONFIG_LIST, TABLE_CONFIG } from './table.config';
 

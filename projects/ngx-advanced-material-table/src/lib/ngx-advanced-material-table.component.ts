@@ -205,8 +205,7 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
 
                 filterData.forEach((filter) => {
                     const value = _.get(row, filter.key);
-                    // tslint:disable-next-line: no-construct
-                    const stringValue = new String(value).toLowerCase();
+                    const stringValue = value.toLowerCase();
                     match = match || stringValue.indexOf(this.mainFilter) !== -1;
                 });
                 return match;
@@ -339,7 +338,9 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
     }
 
     //#region Drag and Drop
-    headerDragStarted(index: number) {}
+    headerDragStarted(index: number) {
+        // Purposedly in blank
+    }
 
     headerDropListDropped(event: CdkDragDrop<IColumnDefinition>) {
         if (!event) {
@@ -370,8 +371,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
             if (!column.FilterValues) {
                 column.FilterValues = [];
             }
-
-            //const fieldName = x.SelectedField && x.SelectedField.SelectField ? x.SelectedField.SelectField : x.Field;
 
             filters.push({
                 key: column.Field,
