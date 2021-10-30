@@ -6,7 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandoaabel_ngx-advanced-material-table&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fernandoaabel_ngx-advanced-material-table)
 
 
-# Live Demo
+## Live Demo
 https://fernandoaabel.github.io/ngx-advanced-material-table/demo
 
 ## Development server
