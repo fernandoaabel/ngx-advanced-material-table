@@ -6,7 +6,7 @@
         "start": "ng serve --project demo",
         "build": "ng build --configuration production",
         "build:demo": "ng build --project demo",
-        "postbuild": "copy README.md dist/ngx-advanced-material-table",
+        "postbuild": "cp README.md dist/ngx-advanced-material-table",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "prettier-check": "npx prettier --check .",
