@@ -37,3 +37,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      - name: Deploy Demo to GitPages
+        run: |
+          npm run deploy
