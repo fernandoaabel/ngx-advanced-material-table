@@ -1,6 +1,6 @@
 {
     "name": "ngx-advanced-material-table",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --project demo",
@@ -12,9 +12,8 @@
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
         "deploy": "ng deploy --no-silent",
-        "publish": "npm publish ./dist/ngx-advanced-material-table/",
-        "pre-release": "npm run release -- --prerelease",
-        "release": "standard-version"
+        "release": "standard-version",
+        "publish": "npm publish ./dist/ngx-advanced-material-table/"
     },
     "private": true,
     "dependencies": {
