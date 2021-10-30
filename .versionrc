@@ -9,10 +9,13 @@
             "filename": "package.json"
         },
         {
+            "filename": "package-lock.json"
+        },
+        {
             "filename": "projects/ngx-advanced-material-table/package.json"
         },
         {
-            "filename": "package-lock.json"
+            "filename": "projects/ngx-advanced-material-table/package-lock.json"
         }
     ]
 }
