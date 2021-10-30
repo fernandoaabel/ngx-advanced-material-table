@@ -1,1 +1,0 @@
-{"version":3,"file":"key-filter-values.interface.d.ts","sourceRoot":"","sources":["../../../../projects/ngx-advanced-material-table/src/lib/interfaces/key-filter-values.interface.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,eAAe,EAAE,MAAM,+BAA+B,CAAC;AAE5E,MAAM,WAAW,gBAAgB;IAC7B,GAAG,EAAE,MAAM,CAAC;IACZ,IAAI,EAAE,UAAU,CAAC;IACjB,MAAM,EAAE,eAAe,EAAE,CAAC;CAC7B"}
