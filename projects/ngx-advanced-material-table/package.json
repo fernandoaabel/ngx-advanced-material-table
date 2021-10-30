@@ -4,6 +4,28 @@
     "author": "Fernando Abel <fernandoaabel@gmail.com>",
     "license": "MIT",
     "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fernandoaabel/ngx-advanced-material-table"
+    },
+    "keywords": [
+        "angular",
+        "angular-material",
+        "angular-material-table",
+        "angular component",
+        "table",
+        "filter",
+        "filtering",
+        "sort",
+        "sorting",
+        "material",
+        "typescript",
+        "pagination",
+        "print"
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
     "peerDependencies": {
         "@angular/common": "^12.0.5",
         "@angular/core": "^12.0.5",

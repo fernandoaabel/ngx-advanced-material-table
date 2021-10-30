@@ -35,27 +35,6 @@ jobs:
               run: npm run build:demo
             # - run: npm run lint
             # - run: npm test -- --coverage
-            # - name: SonarCloud Scan
-            #   if: startsWith(matrix.node-version, '15')
-            #   uses: sonarsource/sonarcloud-github-action@master
-            #   env:
-            #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            - name: Conventional Changelog Action
-              id: changelog
-              uses: TriPSs/conventional-changelog-action@v3
-              with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
-                output-file: 'false'
-            - name: Create Release
-              uses: actions/create-release@v1
-              if: ${{ steps.changelog.outputs.skipped == 'false' }}
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                tag_name: ${{ steps.changelog.outputs.tag }}
-                release_name: ${{ steps.changelog.outputs.tag }}
-                body: ${{ steps.changelog.outputs.clean_changelog }}
             - name: Deploy Demo to GitPages
               if: startsWith(matrix.node-version, '15')
               env:
