@@ -3,6 +3,7 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0.
 
 [![ci](https://github.com/fernandoaabel/ngx-advanced-material-table/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fernandoaabel/ngx-advanced-material-table/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandoaabel_ngx-advanced-material-table&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fernandoaabel_ngx-advanced-material-table)
 
 ## Development server
 
