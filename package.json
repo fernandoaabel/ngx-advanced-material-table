@@ -6,13 +6,15 @@
         "start": "ng serve --project demo",
         "build": "ng build --configuration production",
         "build:demo": "ng build --project demo",
+        "postbuild": "copy README.md dist/ngx-advanced-material-table",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "prettier-check": "npx prettier --check .",
         "prettier": "npx prettier --write .",
-        "pre-deploy": "npm run build & npm run build:demo",
         "deploy": "ng deploy --no-silent",
-        "publish": "npm publish ./dist/ngx-advanced-material-table/"
+        "publish": "npm publish ./dist/ngx-advanced-material-table/",
+        "pre-release": "npm run release -- --prerelease",
+        "release": "standard-version"
     },
     "private": true,
     "dependencies": {
@@ -46,6 +48,7 @@
         "karma-jasmine": "~4.0.0",
         "karma-jasmine-html-reporter": "^1.5.0",
         "ng-packagr": "^12.0.0",
+        "standard-version": "^9.3.2",
         "typescript": "~4.2.3"
     }
 }
