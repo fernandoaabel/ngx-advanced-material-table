@@ -1,0 +1,6 @@
+export var DialogActionType;
+(function (DialogActionType) {
+    DialogActionType["Ok"] = "Ok";
+    DialogActionType["Cancel"] = "Cancel";
+})(DialogActionType || (DialogActionType = {}));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGlhbG9nLWFjdGlvbi5lbnVtLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vcHJvamVjdHMvbmd4LWFkdmFuY2VkLW1hdGVyaWFsLXRhYmxlL3NyYy9saWIvaW50ZXJmYWNlcy9lbnVtcy9kaWFsb2ctYWN0aW9uLmVudW0udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFOLElBQVksZ0JBR1g7QUFIRCxXQUFZLGdCQUFnQjtJQUN4Qiw2QkFBUyxDQUFBO0lBQ1QscUNBQWlCLENBQUE7QUFDckIsQ0FBQyxFQUhXLGdCQUFnQixLQUFoQixnQkFBZ0IsUUFHM0IiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZW51bSBEaWFsb2dBY3Rpb25UeXBlIHtcbiAgICBPayA9ICdPaycsXG4gICAgQ2FuY2VsID0gJ0NhbmNlbCcsXG59XG4iXX0=

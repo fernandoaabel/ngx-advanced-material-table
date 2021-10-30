@@ -1,0 +1,24 @@
+{
+  "name": "ngx-advanced-material-table",
+  "description": "Advanced Angular Material Table component, along with many features such as filter and display/hide columns",
+  "author": "Fernando Abel <fernandoaabel@gmail.com>",
+  "license": "MIT",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^12.0.5",
+    "@angular/core": "^12.0.5",
+    "@angular/material": "^12.2.12",
+    "lodash": "^4.17.21",
+    "@types/lodash": "^4.14.176"
+  },
+  "dependencies": {
+    "tslib": "^2.1.0"
+  },
+  "main": "bundles/ngx-advanced-material-table.umd.js",
+  "module": "fesm2015/ngx-advanced-material-table.js",
+  "es2015": "fesm2015/ngx-advanced-material-table.js",
+  "esm2015": "esm2015/ngx-advanced-material-table.js",
+  "fesm2015": "fesm2015/ngx-advanced-material-table.js",
+  "typings": "ngx-advanced-material-table.d.ts",
+  "sideEffects": false
+}
