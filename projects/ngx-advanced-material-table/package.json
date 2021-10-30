@@ -3,7 +3,7 @@
     "description": "Advanced Angular Material Table component, along with many features such as filter and display/hide columns",
     "author": "Fernando Abel <fernandoaabel@gmail.com>",
     "license": "MIT",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/fernandoaabel/ngx-advanced-material-table"
