@@ -19,6 +19,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   registry-url: https://registry.npmjs.org/
+            - run: cat $NPM_CONFIG_USERCONFIG
             - run: npm ci
             - run: npm run build
             - run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
