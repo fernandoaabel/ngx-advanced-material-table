@@ -1,35 +1,31 @@
 # NgxAdvancedMaterialTable
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0.
-
 [![npm](https://img.shields.io/npm/v/ngx-advanced-material-table)](https://www.npmjs.com/package/ngx-advanced-material-table)
 [![ci](https://github.com/fernandoaabel/ngx-advanced-material-table/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fernandoaabel/ngx-advanced-material-table/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandoaabel_ngx-advanced-material-table&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fernandoaabel_ngx-advanced-material-table)
 
-## Live Demo
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0.
+
+# Demo
 
 https://fernandoaabel.github.io/ngx-advanced-material-table/demo
 
-## Development server
+# Run it locally
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm run start` to run _Demo_ project on `http://localhost:4200/`.
 
-## Code scaffolding
+Run `npm run watch` to build _ngx-advanced-material-table_ library and watch new file changes.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Release
 
-## Build
+[Standard-version](https://github.com/conventional-changelog/standard-version) to bump version, generates changelog, creates a commit and a tag.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run release` to bump a new release version. Example:
 
-## Running unit tests
+Suppose the last version of your code is 1.0.0. Run:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+-   `npm run release -- --release-as patch` to generate version `1.0.1`
 
-## Running end-to-end tests
+-   `npm run release -- --release-as minor` to generate version `1.1.0`
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+-   `npm run release -- --release-as major` to generate version `2.0.0` (DEFAULT)

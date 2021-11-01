@@ -13,7 +13,7 @@
         "prettier": "npx prettier --write .",
         "deploy": "ng deploy --no-silent",
         "release": "standard-version",
-        "publish": "npm publish ./dist/ngx-advanced-material-table/"
+        "prepublishOnly": "npm run build"
     },
     "private": true,
     "dependencies": {
