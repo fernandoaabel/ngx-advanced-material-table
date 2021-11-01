@@ -23,5 +23,6 @@ jobs:
             - run: npm run build
             - run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
             - run: npm publish --access public
+              working-directory: dist/ngx-advanced-material-table/
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
