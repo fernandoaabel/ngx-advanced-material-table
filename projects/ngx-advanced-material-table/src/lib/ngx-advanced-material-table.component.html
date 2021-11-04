@@ -183,11 +183,7 @@
                         </ng-container> -->
                         <!-- Icon -->
                         <ng-container *ngSwitchCase="columnType.Icon">
-                            <button
-                                [id]="column.Title + '-' + element[column.IdField!]"
-                                mat-icon-button
-                                (click)="iconClick(element, column)"
-                            >
+                            <button mat-icon-button (click)="iconClick(element, column)">
                                 <mat-icon> {{ column.MatIconName }}</mat-icon>
                                 {{ getContent(column, element) }}
                             </button>

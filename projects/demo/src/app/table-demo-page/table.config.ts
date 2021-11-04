@@ -11,7 +11,7 @@ export const TABLE_CONFIG: ITableConfiguration = {
 };
 
 export const COLUMNS_CONFIG_LIST: IColumnDefinition[] = [
-    { Field: 'firstname', Title: 'First Name', Display: true, ColumnType: ColumnType.String },
+    { Field: 'firstname', Title: 'First Name', Display: true, ColumnType: ColumnType.String, SortDirection: 'asc' },
     { Field: 'lastname', Title: 'Last Name', Display: true, ColumnType: ColumnType.String },
     { Field: 'email', Title: 'Email', Display: true, ColumnType: ColumnType.String },
     { Field: 'phone', Title: 'Phone', Display: true, ColumnType: ColumnType.String },

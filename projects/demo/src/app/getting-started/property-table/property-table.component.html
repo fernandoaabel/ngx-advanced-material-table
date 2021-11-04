@@ -1,0 +1,27 @@
+<div class="docs-api">
+    <table class="docs-api-properties-table" class="mat-elevation-z8">
+        <tbody>
+            <tr class="docs-api-properties-header-row">
+                <th class="docs-api-properties-th">Name</th>
+                <th class="docs-api-properties-th">Description</th>
+            </tr>
+
+            <tr *ngFor="let row of rows" class="docs-api-properties-row">
+                <td class="docs-api-properties-name-cell">
+                    <div *ngIf="row.Input" class="docs-api-input-marker">
+                        @Input(<span class="docs-api-input-alias">'{{ row.Input }}'</span>)
+                    </div>
+                    <div *ngIf="row.Output" class="docs-api-input-marker">
+                        @Output(<span class="docs-api-input-alias">'{{ row.Output }}'</span>)
+                    </div>
+                    <p class="docs-api-property-name">
+                        <code>{{ row.Name }}</code>
+                    </p>
+                </td>
+                <td class="docs-api-property-description">
+                    <p *ngIf="row.Description" [innerHtml]="row.Description"></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

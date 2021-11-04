@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService, Person } from '../shared/services/data.service';
+import { DataService, Person } from '../services/data.service';
 import { COLUMNS_CONFIG_LIST, TABLE_CONFIG } from './table.config';
 
 @Component({
@@ -12,13 +12,19 @@ export class TableDemoPageComponent implements OnInit {
     COLUMNS_CONFIG_LIST = COLUMNS_CONFIG_LIST;
 
     data: Person[] = [];
-    selectedItems: Person[] = [];
+    selectedData: Person[] = [];
 
     constructor(private dataService: DataService) {}
 
     ngOnInit() {
         this.dataService.getAll(1000).subscribe((response) => {
             this.data = response;
+
+            this.selectedData = this.data.filter((x) => x.firstname.startsWith('A') && x.gender == 'female');
         });
+    }
+
+    rowSelected(event: [boolean, Person[]]): void {
+        this.selectedData = event[1];
     }
 }

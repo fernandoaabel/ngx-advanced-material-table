@@ -1,1 +1,37 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary">
+    <button mat-icon-button matTooltip="Application Menu" (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button>
+
+    <span>Demo | ngx-advanced-material-table</span>
+
+    <span style="flex: 1 1 auto"></span>
+
+    <a
+        mat-icon-button
+        matTooltip="Go to Github"
+        target="_blank"
+        href="https://github.com/fernandoaabel/ngx-advanced-material-table"
+        rel="noopener"
+    >
+        <mat-icon>open_in_new</mat-icon>
+    </a>
+</mat-toolbar>
+
+<mat-sidenav-container style="height: calc(100% - 64px); margin: 0">
+    <mat-sidenav #sidenav mode="side" opened="true" [class.mat-elevation-z1]="true" style="width: 240px">
+        <mat-nav-list>
+            <mat-list-item routerLink="demo">
+                <span matLine>Demo</span>
+            </mat-list-item>
+            <mat-list-item routerLink="getting-started">
+                <span matLine>Documentation</span>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div style="margin: 20px 30px">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -3,7 +3,7 @@
     "version": "1.0.1",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve --project demo",
+        "start": "ng serve --project demo -o",
         "build": "ng build --configuration production",
         "build:demo": "ng build --project demo",
         "postbuild": "cp README.md dist/ngx-advanced-material-table",

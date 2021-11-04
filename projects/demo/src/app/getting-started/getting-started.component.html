@@ -1,0 +1,81 @@
+<div class="docs-wrapper docs-api">
+    <div class="docs-markdown">
+        <h1>Getting Started</h1>
+
+        <p>This guide explains how to install, set up and use the "ngx-advanced-material-table" library in your Angular project.</p>
+
+        <mat-divider></mat-divider>
+
+        <section class="step">
+            <h2>Install Angular Material</h2>
+
+            <p>Use the Angular CLI's installation schematic to set up your Angular Material project by running the following command:</p>
+
+            <pre><code>ng add @angular/material</code></pre>
+        </section>
+
+        <section class="step">
+            <h2>Install <code>ngx-advanced-material-table</code></h2>
+
+            <pre><code>npm i ngx-advanced-material-table</code></pre>
+        </section>
+
+        <section class="step">
+            <h2>Import <code>NgxAdvancedMaterialTableModule</code> module</h2>
+            <p>Add the <code>NgxAdvancedMaterialTableModule</code> module to the imports of your application module</p>
+        </section>
+
+        <section class="step">
+            <h2>Configure your table</h2>
+
+            <app-property-table [rows]="inputTableConfiguration"></app-property-table>
+
+            <p>Resulting in a code like the below:</p>
+
+            <pre><code [innerText]="tableConfigurationCode"></code></pre>
+        </section>
+
+        <section class="step">
+            <h2>Configure your columns list</h2>
+
+            <p>Define each column of your table, using below properties:</p>
+
+            <app-property-table [rows]="inputColumns"></app-property-table>
+
+            <p>Example:</p>
+
+            <pre><code [innerText]="columnsConfigurationCode"></code></pre>
+        </section>
+
+        <section class="step">
+            <h2>Finally using <code>ngx-advanced-material-table</code></h2>
+
+            <h3>Input properties</h3>
+
+            <p>
+                The component has mainly four <code>Input()</code> properties for you to use, where the first three are required for your
+                table to work (data, tableConfiguration, tableColumns).
+            </p>
+
+            <app-property-table [rows]="inputTable"></app-property-table>
+
+            <p>Resulting in a code like the below:</p>
+
+            <pre><code [innerText]="configurationCode"></code></pre>
+
+            <h3>Output events</h3>
+
+            <p>
+                The component has many <code>Output()</code> events for you to map your own functions and handle actions which happened
+                within the table component, they are:
+            </p>
+
+            <app-property-table [rows]="outputTable"></app-property-table>
+
+            <h4>Html:</h4>
+            <pre><code [innerText]="outputCode"></code></pre>
+            <h4>Function:</h4>
+            <pre><code [innerText]="rowSelectedFunctionCode"></code></pre>
+        </section>
+    </div>
+</div>

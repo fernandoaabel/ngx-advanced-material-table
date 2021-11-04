@@ -1,10 +1,10 @@
 export interface ITableConfiguration {
     Id: string;
     LocalStorageKey?: string;
-    AllowFilter?: boolean;
     AllowActions?: boolean;
-    AllowSelect?: boolean;
-    MultipleSelect?: boolean;
+    AllowFilter?: boolean;
     AllowPagination?: boolean;
+    AllowSelect?: boolean;
     AllowSorting?: boolean;
+    MultipleSelect?: boolean;
 }

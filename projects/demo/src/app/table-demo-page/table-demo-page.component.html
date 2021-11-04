@@ -1,30 +1,9 @@
-<p>
-    <mat-toolbar color="primary">
-        <mat-toolbar-row>
-            <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-                <mat-icon>menu</mat-icon>
-            </button>
-            <span>Demo | ngx-advanced-material-table</span>
-            <span class="example-spacer"></span>
+<ngx-advanced-material-table
+    [data]="data"
+    [tableConfiguration]="TABLE_CONFIG"
+    [tableColumns]="COLUMNS_CONFIG_LIST"
+    [selectedData]="selectedData"
+    (rowSelected)="rowSelected($event)"
+></ngx-advanced-material-table>
 
-            <a
-                mat-icon-button
-                class="example-icon"
-                aria-label="Share"
-                target="_blank"
-                href="https://github.com/fernandoaabel/ngx-advanced-material-table"
-                rel="noopener"
-            >
-                <mat-icon>open_in_new</mat-icon>
-            </a>
-        </mat-toolbar-row>
-    </mat-toolbar>
-</p>
-
-<div>
-    <ngx-advanced-material-table
-        [data]="data"
-        [tableConfiguration]="TABLE_CONFIG"
-        [tableColumns]="COLUMNS_CONFIG_LIST"
-    ></ngx-advanced-material-table>
-</div>
+<p>Number of rows selected: {{ selectedData.length }}</p>

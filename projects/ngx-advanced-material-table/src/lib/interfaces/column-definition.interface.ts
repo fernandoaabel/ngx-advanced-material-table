@@ -29,7 +29,6 @@ export interface IColumnDefinitionBase {
 export interface IColumnDefinition extends IColumnDefinitionBase {
     ColumnType: ColumnType;
     MatIconName?: string;
-    IdField?: string;
     FilterValues?: ColumnValueType[];
     NumberInputOptions?: {
         MinInputNumber?: number;

@@ -66,10 +66,7 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
     @Output() iconClicked: EventEmitter<[T, IColumnDefinition]> = new EventEmitter();
     @Output() rowSelected: EventEmitter<[boolean, T[]]> = new EventEmitter<[boolean, T[]]>();
     @Output() numberChange: EventEmitter<[T, IColumnDefinition, number]> = new EventEmitter();
-    @Output() catalogueClicked = new EventEmitter();
-    @Output() searchCatalogueClicked = new EventEmitter();
-    @Output() clearCatalogueClicked = new EventEmitter();
-    @Output() hyperLinkClicked = new EventEmitter();
+    @Output() hyperLinkClicked: EventEmitter<[T, IColumnDefinition]> = new EventEmitter();
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -276,18 +273,6 @@ export class AdvancedMaterialTableComponent<T = any> implements OnInit, AfterVie
 
     numberInputChange(element: T, column: IColumnDefinition, event: any): void {
         this.numberChange.emit([element, column, event.target.value]);
-    }
-
-    onCatalogueClicked(element: T, column: IColumnDefinition): void {
-        this.catalogueClicked.emit([element, column]);
-    }
-
-    onCatalogueSearchClicked(element: T, column: IColumnDefinition): void {
-        this.searchCatalogueClicked.emit([element, column]);
-    }
-
-    onCatalogueClearClicked(element: T, column: IColumnDefinition): void {
-        this.clearCatalogueClicked.emit([element, column]);
     }
 
     onHyperLinkClicked(element: T, column: IColumnDefinition): void {
