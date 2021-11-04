@@ -7,3 +7,598 @@ body {
     margin: 0;
     font-family: 'Roboto', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
 }
+
+.docs-api {
+    max-width: 100%;
+}
+
+.docs-api-properties-name-cell,
+.docs-api-method-parameter-row {
+    font-size: 14px;
+}
+
+.docs-api-method-parameter-type {
+    font-size: 12px;
+}
+
+.docs-api-class-name,
+.docs-api-module-import {
+    display: inline;
+}
+
+.docs-api-method-name-cell {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.docs-api-method-parameters-header-cell,
+.docs-api-method-returns-header-cell {
+    font-size: 14px;
+}
+
+.docs-api-input-marker,
+.docs-api-output-marker,
+.docs-api-deprecated-marker {
+    font-size: 12px;
+}
+
+.docs-api-deprecated-marker {
+    margin-right: 8px;
+}
+
+.docs-api-module-import,
+.docs-api-class-selector-name,
+.docs-api-class-export-name {
+    font-family: 'Roboto Mono', monospace;
+    padding: 3px;
+}
+
+.docs-api-class-extends-type {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+    color: inherit;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.docs-api-modifier-method-marker {
+    display: inline-block;
+    vertical-align: baseline;
+    padding: 2px 7px;
+    margin-right: 12px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.docs-api-deprecated-marker,
+.docs-api-class-deprecated-marker,
+.docs-api-interface-deprecated-marker {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.docs-api-deprecated-marker[title],
+.docs-api-class-deprecated-marker[title],
+.docs-api-interface-deprecated-marker[title] {
+    border-bottom: 1px dotted grey;
+    cursor: help;
+}
+
+.docs-api-deprecated-marker + .docs-api-property-name {
+    text-decoration: line-through;
+}
+
+.docs-markdown {
+    max-width: 100%;
+}
+
+.docs-markdown h1 {
+    display: inline-block;
+    font-size: 34px;
+    font-weight: 400;
+    padding: 5px;
+}
+
+.docs-markdown h2 {
+    font-size: 24px;
+}
+
+.docs-markdown h3 {
+    font-size: 20px;
+}
+
+.docs-markdown h2,
+.docs-markdown h4 {
+    margin-top: 40px;
+}
+
+.docs-markdown h5 {
+    font-size: 18px;
+}
+
+.docs-markdown p,
+.docs-markdown ul,
+.docs-markdown ol {
+    font-size: 16px;
+    line-height: 28px;
+}
+
+.docs-markdown a {
+    text-decoration: none;
+}
+
+.docs-markdown pre {
+    border-radius: 5px;
+    display: block;
+    margin: 16px auto;
+    overflow-x: auto;
+    padding: 20px;
+    white-space: pre-wrap;
+}
+
+.docs-markdown pre code {
+    padding: 0;
+    font-size: 100%;
+}
+
+.docs-markdown code {
+    padding: 3px;
+}
+
+.docs-header-link {
+    padding-top: 20px;
+    margin-top: -20px;
+}
+
+.docs-header-link header-link {
+    margin-left: -30px;
+    margin-top: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.docs-header-link header-link a {
+    display: inline-flex;
+    text-decoration: none;
+}
+
+.docs-header-link .material-icons {
+    visibility: hidden;
+}
+
+.docs-header-link:hover .material-icons {
+    visibility: visible;
+}
+
+.docs-api table,
+.docs-markdown > table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0 0 32px;
+    width: 100%;
+}
+
+.docs-markdown > table {
+    font-size: 14px;
+}
+
+.docs-markdown > table code {
+    background: transparent;
+}
+
+.docs-api th,
+.docs-markdown > table th {
+    font-weight: 400;
+    max-width: 100px;
+    padding: 14px 16px;
+    text-align: left;
+}
+
+.docs-api td,
+.docs-markdown > table td {
+    font-weight: 400;
+    padding: 8px 16px;
+}
+
+@media (max-width: 720px) {
+    .docs-api td.docs-api-properties-name-cell,
+    .docs-api td.docs-api-method-parameter-cell,
+    .docs-api td.docs-api-method-returns-type-cell,
+    .docs-api td.docs-api-method-description-cell,
+    .docs-markdown > table td.docs-api-properties-name-cell,
+    .docs-markdown > table td.docs-api-method-parameter-cell,
+    .docs-markdown > table td.docs-api-method-returns-type-cell,
+    .docs-markdown > table td.docs-api-method-description-cell {
+        min-width: 80px;
+        word-break: break-word;
+    }
+}
+
+@media (max-width: 959px) {
+    .docs-api table,
+    .docs-markdown > table {
+        margin: 0 0 32px;
+    }
+
+    .docs-api th,
+    .docs-markdown > table th {
+        padding: 6px 16px;
+    }
+
+    .docs-api td,
+    .docs-markdown > table td {
+        padding: 4px 8px;
+    }
+}
+
+html,
+body {
+    height: 100vh;
+}
+
+body {
+    font-family: 'Roboto', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+    margin: 0;
+}
+
+.docs-button[md-button],
+.docs-button[md-raised-button] {
+    text-transform: uppercase;
+}
+
+h1,
+h2 {
+    font-weight: 400;
+}
+
+.docs-primary-header {
+    padding-left: 20px;
+}
+
+.docs-primary-header h1 {
+    font-weight: 300;
+    margin: 0;
+    padding: 28px 8px;
+    font-size: 20px;
+}
+
+.docs-component-category-list-card-image svg {
+    width: 100%;
+}
+
+.docs-footer-angular-logo svg {
+    height: 50px;
+}
+
+.docs-angular-logo svg {
+    height: 26px;
+    margin: 0 4px 3px 0;
+    vertical-align: middle;
+}
+
+.docs-github-logo svg {
+    height: 21px;
+    margin: 0 7px 2px 0;
+    vertical-align: middle;
+}
+
+code,
+pre {
+    font-family: 'Roboto Mono', monospace;
+}
+
+code {
+    font-size: 90%;
+}
+
+pre {
+    font-size: 14px;
+}
+
+.docs-app-background {
+    background: #fafafa;
+}
+
+.docs-primary-header {
+    background: #3f51b5;
+}
+
+.docs-primary-header h1 {
+    color: #fff;
+}
+
+.docs-footer {
+    background: #3f51b5;
+    color: #fff;
+}
+
+.docs-help-support {
+    color: #0000008a;
+}
+
+.docs-help-support a {
+    color: #000000de;
+}
+
+.is-next-version {
+    background: #b71c1c !important;
+}
+
+.docs-carousel-nav.mat-mini-fab {
+    background: #fafafa;
+    color: #0000008a;
+}
+
+.docs-component-category-list-summary a {
+    color: #3f51b5;
+}
+
+.docs-component-category-list-card-summary {
+    color: #0000008a;
+}
+
+.docs-component-category-list-card {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    background: white;
+}
+
+.docs-component-category-list-card:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.docs-component-category-list-card-title {
+    color: #000000de;
+}
+
+.docs-component-category-list-card-image-wrapper {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.docs-component-viewer-nav-content {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.docs-component-viewer-nav-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.26);
+}
+
+.docs-component-viewer-nav-content a {
+    color: #0000008a;
+}
+
+.docs-component-viewer-nav-content a:hover {
+    color: #000000de;
+}
+
+.docs-component-viewer-nav-content a.docs-component-viewer-sidenav-item-selected {
+    background: rgba(63, 81, 181, 0.15);
+    color: #3f51b5;
+}
+
+.docs-component-viewer-nav-content a.docs-component-viewer-sidenav-item-selected:hover {
+    background: rgba(63, 81, 181, 0.3);
+}
+
+.docs-component-viewer-nav-content .mat-list-item {
+    color: #000000a6;
+}
+
+@media (max-width: 959px) {
+    .docs-component-viewer-sidenav .docs-component-viewer-nav-content {
+        background: none;
+    }
+
+    .mat-drawer::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.26);
+    }
+}
+
+guide-viewer,
+app-component-viewer {
+    color: #000000de;
+}
+
+guide-viewer .mat-tab-label:focus,
+app-component-viewer .mat-tab-label:focus {
+    color: #000000de;
+}
+
+.docs-api-h3 {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.docs-api-method-name-cell {
+    color: #283593;
+}
+
+.docs-api-method-returns-type,
+.docs-api-method-parameter-type {
+    color: #303f9f;
+}
+
+.docs-api-modifier-method-marker {
+    background-color: #5c6bc0;
+    color: #fff;
+}
+
+.docs-api-h1 {
+    display: none !important;
+}
+
+.docs-api > p {
+    word-break: break-word;
+}
+
+.docs-api a {
+    color: #3f51b5;
+}
+
+.docs-api-class-name,
+.docs-api-module-import,
+.docs-api-class-selector-name,
+.docs-api-class-export-name {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.docs-markdown a:not(.mat-button-base) {
+    color: #3f51b5;
+}
+
+.docs-markdown pre {
+    background: rgba(0, 0, 0, 0.8);
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.docs-markdown pre code {
+    background: transparent;
+}
+
+.docs-markdown h3 .material-icons,
+.docs-markdown h4 .material-icons {
+    color: #0000008a;
+}
+
+.docs-markdown code {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.docs-svg-primary-fill {
+    fill: #3f51b5;
+}
+
+.docs-svg-primary-stroke {
+    stroke: #3f51b5;
+}
+
+.docs-svg-primary-stop-color {
+    stop-color: #3f51b5;
+}
+
+.docs-svg-accent-fill {
+    fill: #ff4081;
+}
+
+.docs-svg-accent-stroke {
+    stroke: #ff4081;
+}
+
+.docs-svg-accent-stop-color {
+    stop-color: #ff4081;
+}
+
+.docs-svg-primary-dark-30-fill {
+    fill: #2c397f;
+}
+
+.docs-svg-primary-dark-30-stroke {
+    stroke: #2c397f;
+}
+
+.docs-svg-primary-dark-30-stop-color {
+    stop-color: #2c397f;
+}
+
+.docs-svg-primary-dark-40-fill {
+    fill: #26316d;
+}
+
+.docs-svg-primary-dark-40-stroke {
+    stroke: #26316d;
+}
+
+.docs-svg-primary-dark-40-stop-color {
+    stop-color: #26316d;
+}
+
+.docs-svg-primary-light-20-fill {
+    fill: #6171c8;
+}
+
+.docs-svg-primary-light-20-stroke {
+    stroke: #6171c8;
+}
+
+.docs-svg-primary-light-20-stop-color {
+    stop-color: #6171c8;
+}
+
+.docs-svg-primary-light-30-fill {
+    fill: #7583cf;
+}
+
+.docs-svg-primary-light-30-stroke {
+    stroke: #7583cf;
+}
+
+.docs-svg-primary-light-30-stop-color {
+    stop-color: #7583cf;
+}
+
+.docs-svg-primary-light-40-fill {
+    fill: #8994d6;
+}
+
+.docs-svg-primary-light-40-stroke {
+    stroke: #8994d6;
+}
+
+.docs-svg-primary-light-40-stop-color {
+    stop-color: #8994d6;
+}
+
+.docs-svg-primary-light-60-fill {
+    fill: #b0b8e4;
+}
+
+.docs-svg-primary-light-60-stroke {
+    stroke: #b0b8e4;
+}
+
+.docs-svg-primary-light-60-stop-color {
+    stop-color: #b0b8e4;
+}
+
+.docs-svg-primary-light-80-fill {
+    fill: #d8dbf1;
+}
+
+.docs-svg-primary-light-80-stroke {
+    stroke: #d8dbf1;
+}
+
+.docs-svg-primary-light-80-stop-color {
+    stop-color: #d8dbf1;
+}
+
+.docs-svg-primary-light-85-fill {
+    fill: #e1e4f5;
+}
+
+.docs-svg-primary-light-85-stroke {
+    stroke: #e1e4f5;
+}
+
+.docs-svg-primary-light-85-stop-color {
+    stop-color: #e1e4f5;
+}
+
+.docs-api table,
+.docs-markdown > table {
+    color: #000000de;
+}
+
+.docs-api th,
+.docs-markdown > table th {
+    background: whitesmoke;
+}
+
+.docs-api td,
+.docs-api thead,
+.docs-markdown > table td,
+.docs-markdown > table thead {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
